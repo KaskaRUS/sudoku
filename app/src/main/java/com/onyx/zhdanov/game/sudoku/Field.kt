@@ -5,7 +5,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.RectF
 import android.util.Log
+import java.lang.StringBuilder
+import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -21,15 +24,17 @@ class Field(width: Int, height: Int){
     private val field: Array<IntArray> = generateStartedField()
     private val textBound = Rect()
 
-    fun draw() {
+    fun draw(refreshRect: RectF = RectF()) {
         val canvas = Canvas(bitmap)
+        if (!refreshRect.isEmpty) canvas.clipRect(refreshRect)
+        canvas.drawColor(Color.WHITE)
 
         // horizontal lines
         for (i in 0..FIELD_SIZE) {
             paint.strokeWidth = if (i % 3 == 0) BOLD_LINE_WEIGHT else STROKE_LINE_WEIGHT
             val sX: Float = drawableConfiguration.paddingX
             val sY: Float = drawableConfiguration.paddingY + i * drawableConfiguration.cellSize
-            val eX: Float = drawableConfiguration.paddingX + 9 * drawableConfiguration.cellSize
+            val eX: Float = drawableConfiguration.paddingX + FIELD_SIZE * drawableConfiguration.cellSize
             val eY: Float = drawableConfiguration.paddingY + i * drawableConfiguration.cellSize
             canvas.drawLine(sX, sY, eX, eY, paint)
         }
@@ -40,7 +45,7 @@ class Field(width: Int, height: Int){
             val sX: Float = drawableConfiguration.paddingX + i * drawableConfiguration.cellSize
             val sY: Float = drawableConfiguration.paddingY
             val eX: Float = drawableConfiguration.paddingX + i * drawableConfiguration.cellSize
-            val eY: Float = drawableConfiguration.paddingY + 9 * drawableConfiguration.cellSize
+            val eY: Float = drawableConfiguration.paddingY + FIELD_SIZE * drawableConfiguration.cellSize
             canvas.drawLine(sX, sY, eX, eY, paint)
         }
 
@@ -60,11 +65,15 @@ class Field(width: Int, height: Int){
     }
 
     fun changeNumber(x: Float, y: Float, newValue: Int) {
-        val j = ((x - drawableConfiguration.paddingX) / drawableConfiguration.cellSize).roundToInt()
-        val i = ((y - drawableConfiguration.paddingY) / drawableConfiguration.cellSize).roundToInt()
-
+        val (j, i) = getCellCoordinates(x, y)
         field[i][j] = newValue
-        draw()
+        draw(getCellRect(j, i))
+        val buf = StringBuilder()
+        buf.appendLine("=======")
+        for (row in field) {
+            buf.appendLine(row.joinToString())
+        }
+        Log.i("field", buf.toString())
     }
 
     fun sizeChange(width: Int, height: Int) {
@@ -72,9 +81,29 @@ class Field(width: Int, height: Int){
         drawableConfiguration = getDrawableConfiguration(width, height)
     }
 
+    fun getCellRect(refreshRect: RectF): RectF {
+        val (j, i) = getCellCoordinates(refreshRect.centerX(), refreshRect.centerY())
+        Log.i("field", "x: $j, y: $i")
+        return getCellRect(j, i)
+    }
+
+    private fun getCellRect(j: Int, i: Int): RectF {
+        return RectF(
+            drawableConfiguration.paddingX + j * drawableConfiguration.cellSize,
+            drawableConfiguration.paddingY + i * drawableConfiguration.cellSize,
+            drawableConfiguration.paddingX + (j + 1) * drawableConfiguration.cellSize,
+            drawableConfiguration.paddingY + (i + 1) * drawableConfiguration.cellSize,
+        )
+    }
+
+    fun getCellCoordinates(x: Float, y: Float) = Pair(
+        floor((x - drawableConfiguration.paddingX) / drawableConfiguration.cellSize.toDouble()).roundToInt(),
+        floor((y - drawableConfiguration.paddingY) / drawableConfiguration.cellSize.toDouble()).roundToInt(),
+    )
+
     private fun generateStartedField(): Array<IntArray> {
         return Array(FIELD_SIZE) {
-            IntArray(FIELD_SIZE) { Random.nextInt(10) }
+            IntArray(FIELD_SIZE) { 0 }
         }
     }
 
@@ -82,6 +111,8 @@ class Field(width: Int, height: Int){
         Log.i("field", "width: $width, height: $height")
         return if (width < height) {
             val cellSize = (width - 2 * MIN_PADDING) / FIELD_SIZE.toFloat()
+            Log.i("field", "cellSize: $cellSize")
+
             DrawableConfiguration(
                 digitPaint = Paint().apply {
                     textSize = cellSize * 0.7f
@@ -92,6 +123,7 @@ class Field(width: Int, height: Int){
             )
         } else {
             val cellSize = (height - 2 * MIN_PADDING) / FIELD_SIZE.toFloat()
+            Log.i("field", "cellSize: $cellSize")
             DrawableConfiguration(
                 digitPaint = Paint().apply {
                     textSize = cellSize * 0.7f
