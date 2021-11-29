@@ -11,7 +11,9 @@ import com.onyx.android.sdk.data.PenConstant
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 
-class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
+class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
+
+    private val recognizeHandler = RecognizeHandler(context)
 
     init {
         Log.i("surface", "created")
@@ -32,7 +34,8 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
                 height = limit.height(),
                 context = context,
                 surfaceView = this,
-                field = field
+                field = field,
+                recognizeHandler = recognizeHandler
             )
         )
         touchHelper.setLimitRect(limit, ArrayList<Rect>())

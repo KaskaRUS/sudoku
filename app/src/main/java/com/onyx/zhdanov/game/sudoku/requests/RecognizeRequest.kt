@@ -5,11 +5,12 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import com.onyx.android.sdk.rx.RxRequest
 import com.onyx.android.sdk.utils.RectUtils
-import kotlin.random.Random
+import com.onyx.zhdanov.game.sudoku.RecognizeHandler
 
 class RecognizeRequest(
     private val bitmap: Bitmap,
-    val rectf: RectF
+    val rectf: RectF,
+    private val recognizeHandler: RecognizeHandler
 ) : RxRequest() {
 
     var recognizedDigit: Int = 0
@@ -21,6 +22,6 @@ class RecognizeRequest(
         val canvas = Canvas(copiedBitmap)
         canvas.drawBitmap(bitmap, rect, RectF(0f, 0f, rectf.width(), rectf.height()), null)
 
-        recognizedDigit = Random.nextInt(9) + 1
+        recognizedDigit = recognizeHandler.recognize(copiedBitmap)
     }
 }

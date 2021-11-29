@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
 import android.graphics.RectF
+import android.os.Handler
 import android.util.Log
 import android.view.SurfaceView
 import com.onyx.android.sdk.pen.RawInputCallback
@@ -26,12 +27,14 @@ class PenHandler(
     height: Int,
     private val context: Context,
     private val surfaceView: SurfaceView,
-    private val field: Field
+    private val field: Field,
+    private val recognizeHandler: RecognizeHandler
 ): RawInputCallback() {
     private val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     private val canvas: Canvas = Canvas(bitmap)
     private val rxManager = RxManager.Builder.sharedSingleThreadManager()
     private val drawRect: RectF = RectF(startRect)
+    private val uiHandler: Handler = Handler()
 
     override fun onBeginRawDrawing(p0: Boolean, p1: TouchPoint) {
     }
@@ -65,9 +68,12 @@ class PenHandler(
         Log.i("pen", "rect size: ${drawRect.width()} : ${drawRect.height()}")
         Log.i("pen", "rect center: ${drawRect.centerX()} : ${drawRect.centerY()}")
 
+        val cellRect = field.getCellRect(drawRect)
+
         val recognizeRequest = RecognizeRequest(
             bitmap = bitmap,
-            rectf = field.getCellRect(drawRect)
+            rectf = cellRect,
+            recognizeHandler = recognizeHandler
         )
 
         val partialRefreshRequest = PartialRefreshRequest(
@@ -75,11 +81,10 @@ class PenHandler(
             surfaceView = surfaceView,
             bitmap = bitmap,
             fieldBitmap = field.bitmap,
-            refreshRect = field.getCellRect(drawRect) + refreshRect
+            refreshRect = cellRect + refreshRect
         )
 
         drawRect.set(startRect)
-
         rxManager.enqueue(
             recognizeRequest,
             object : RxCallback<RecognizeRequest>() {
@@ -93,6 +98,9 @@ class PenHandler(
                         object : RxCallback<PartialRefreshRequest>() {
                             override fun onNext(partialRefreshRequest: PartialRefreshRequest) {
                                 Log.i("draw", "refresh")
+                                uiHandler.post {
+                                    canvas.drawColor(Color.WHITE)
+                                }
                             }
                         }
                     )
@@ -122,10 +130,16 @@ class PenHandler(
     companion object {
         val paint = Paint().apply {
             isAntiAlias = true
-            strokeWidth = 3f
+            strokeWidth = 10f
             style = Paint.Style.STROKE
             color = Color.BLACK
         }
+
+        val paintCleaner = Paint().apply {
+            style = Paint.Style.FILL
+            color = Color.WHITE
+        }
+
 
         private val startRect = RectF(10000f, 10000f, 0f, 0f)
     }
