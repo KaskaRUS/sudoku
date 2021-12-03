@@ -12,7 +12,7 @@ import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class Field(width: Int, height: Int){
+class Field(width: Int, height: Int) {
 
     var bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
@@ -21,7 +21,7 @@ class Field(width: Int, height: Int){
     }
 
     private var drawableConfiguration: DrawableConfiguration = getDrawableConfiguration(width, height)
-    private val field: Array<IntArray> = generateStartedField()
+    private val grid = Grid()
     private val textBound = Rect()
 
     fun draw(refreshRect: RectF = RectF()) {
@@ -51,8 +51,8 @@ class Field(width: Int, height: Int){
 
         for (i in 0 until FIELD_SIZE) {
             for (j in 0 until FIELD_SIZE) {
-                if (field[i][j] > 0) {
-                    val text = field[i][j].toString()
+                if (grid[i][j] > 0) {
+                    val text = grid[i][j].toString()
                     drawableConfiguration.digitPaint.getTextBounds(text, 0, 1, textBound)
                     val x: Float =
                         drawableConfiguration.paddingX + (j + 0.5f) * drawableConfiguration.cellSize - textBound.exactCenterX()
@@ -66,14 +66,8 @@ class Field(width: Int, height: Int){
 
     fun changeNumber(x: Float, y: Float, newValue: Int) {
         val (j, i) = getCellCoordinates(x, y)
-        field[i][j] = newValue
+        grid[i][j] = newValue
         draw(getCellRect(j, i))
-        val buf = StringBuilder()
-        buf.appendLine("=======")
-        for (row in field) {
-            buf.appendLine(row.joinToString())
-        }
-        Log.i("field", buf.toString())
     }
 
     fun sizeChange(width: Int, height: Int) {
@@ -100,12 +94,6 @@ class Field(width: Int, height: Int){
         floor((x - drawableConfiguration.paddingX) / drawableConfiguration.cellSize.toDouble()).roundToInt(),
         floor((y - drawableConfiguration.paddingY) / drawableConfiguration.cellSize.toDouble()).roundToInt(),
     )
-
-    private fun generateStartedField(): Array<IntArray> {
-        return Array(FIELD_SIZE) {
-            IntArray(FIELD_SIZE) { 0 }
-        }
-    }
 
     private fun getDrawableConfiguration(width: Int, height: Int): DrawableConfiguration {
         Log.i("field", "width: $width, height: $height")
