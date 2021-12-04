@@ -21,7 +21,7 @@ class Field(width: Int, height: Int) {
     }
 
     private var drawableConfiguration: DrawableConfiguration = getDrawableConfiguration(width, height)
-    private val grid = Grid()
+    private val grid = Grid(difficult = 10)
     private val textBound = Rect()
 
     fun draw(refreshRect: RectF = RectF()) {

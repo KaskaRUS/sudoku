@@ -7,8 +7,10 @@ import org.junit.Assert.*
 
 class GridTest {
     @Test
-    fun `must generate right full grid`() {
+    fun `must generate right full grid with 1 solution`() {
         val grid = Grid()
+        println(grid.toString())
+        assertEquals(1, grid.findSolution())
         println(grid.toString())
         assertTrue(grid.checkSuccess())
     }
@@ -59,5 +61,43 @@ class GridTest {
             intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8),
         ))
         assertFalse(grid.checkSuccess())
+    }
+
+    @Test
+    fun `must find 2 solutions`() {
+        val grid = Grid(arrayOf(
+            intArrayOf(0, 9, 0, 2, 4, 3, 8, 0, 0),
+            intArrayOf(0, 8, 4, 0, 0, 0, 2, 9, 3),
+            intArrayOf(0, 0, 3, 0, 8, 0, 0, 5, 0),
+
+            intArrayOf(4, 6, 0, 0, 0, 2, 0, 0, 7),
+            intArrayOf(8, 0, 0, 3, 0, 0, 0, 1, 0),
+            intArrayOf(9, 0, 2, 8, 0, 7, 5, 0, 0),
+
+            intArrayOf(0, 0, 0, 4, 0, 6, 7, 0, 8),
+            intArrayOf(0, 7, 0, 0, 2, 1, 4, 6, 0),
+            intArrayOf(0, 0, 6, 7, 0, 0, 0, 3, 0),
+        ))
+        val solutions = grid.findSolution()
+        assertEquals(2, solutions)
+    }
+
+    @Test
+    fun `must find 1 solution`() {
+        val grid = Grid(arrayOf(
+            intArrayOf(0, 3, 0, 0, 0, 0, 0, 0, 8),
+            intArrayOf(0, 8, 4, 0, 3, 5, 1, 0, 7),
+            intArrayOf(0, 0, 0, 0, 0, 8, 0, 4, 3),
+
+            intArrayOf(4, 2, 0, 8, 0, 0, 0, 5, 0),
+            intArrayOf(5, 0, 3, 9, 0, 6, 0, 0, 0),
+            intArrayOf(6, 0, 0, 5, 0, 0, 0, 7, 4),
+
+            intArrayOf(0, 5, 0, 0, 8, 0, 4, 1, 2),
+            intArrayOf(0, 0, 0, 3, 5, 7, 9, 8, 6),
+            intArrayOf(0, 0, 9, 0, 0, 1, 0, 0, 0),
+        ))
+        val solutions = grid.findSolution()
+        assertEquals(1, solutions)
     }
 }

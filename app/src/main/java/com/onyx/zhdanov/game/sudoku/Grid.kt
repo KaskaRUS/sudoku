@@ -4,7 +4,7 @@ import java.lang.StringBuilder
 
 class Grid(private val grid: Array<IntArray>) {
 
-    constructor(difficult: Int = 1): this(generateNewGrid(difficult))
+    constructor(difficult: Int = 1) : this(generateNewGrid(difficult))
 
     fun checkSuccess(): Boolean {
         for (i in 0..8) {
@@ -17,6 +17,12 @@ class Grid(private val grid: Array<IntArray>) {
             }
         }
         return true
+    }
+
+    fun findSolution(): Int {
+        val allSolutions = findAllSolutions(grid)
+        allSolutions.getOrNull(0)?.copyInto(grid)
+        return allSolutions.size
     }
 
     override fun toString(): String {
@@ -37,6 +43,21 @@ class Grid(private val grid: Array<IntArray>) {
         private fun generateNewGrid(difficult: Int): Array<IntArray> {
             val grid = Array(FIELD_SIZE) { IntArray(FIELD_SIZE) { 0 } }
             fillGrid(grid)
+
+            val fullCells = (0 until FIELD_SIZE * FIELD_SIZE).toMutableSet()
+            var attempts = difficult
+            while (attempts > 0) {
+                val i = fullCells.random()
+                val copyGrid = copyGrid(grid)
+                copyGrid[i / FIELD_SIZE][i % FIELD_SIZE] = 0
+                if (findAllSolutions(copyGrid).size != 1) {
+                    attempts--
+                } else {
+                    grid[i / FIELD_SIZE][i % FIELD_SIZE] = 0
+                    fullCells.remove(i)
+                }
+            }
+
             return grid
         }
 
@@ -68,11 +89,43 @@ class Grid(private val grid: Array<IntArray>) {
             return true
         }
 
+        private fun findAllSolutions(grid: Array<IntArray>, foundDecision: Int = 0): List<Array<IntArray>> {
+            for (i in 0 until FIELD_SIZE * FIELD_SIZE) {
+                val x = i % 9
+                val y = i / 9
+
+                if (grid[y][x] == 0) {
+                    val column = grid.getAvailableNumbersInColumn(x)
+                    val row = grid[y].getAvailableNumbers()
+                    val section = grid.getAvailableNumbersInSection(x, y)
+
+                    val availableNumbers = column.intersect(row).intersect(section)
+
+                    var decisions = mutableListOf<Array<IntArray>>()
+                    for (number in availableNumbers) {
+                        grid[y][x] = number
+                        if (checkGrid(grid)) {
+                            val copyGrid = copyGrid(grid)
+                            grid[y][x] = 0
+                            return listOf(copyGrid)
+                        } else {
+                            decisions += findAllSolutions(grid, foundDecision)
+                        }
+                    }
+                    grid[y][x] = 0
+                    return decisions
+                }
+            }
+            return listOf()
+        }
+
+        private fun copyGrid(grid: Array<IntArray>): Array<IntArray> {
+            return grid.map { it.copyOf() }.toTypedArray()
+        }
+
         private fun checkGrid(grid: Array<IntArray>): Boolean {
             for (row in grid) {
-                for (cell in row) {
-                    if (cell != 0) return false
-                }
+                if (row.contains(0)) return false
             }
             return true
         }
