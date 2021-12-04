@@ -61,8 +61,8 @@ class Grid(private val grid: Array<IntArray>) {
             return grid
         }
 
-        private fun fillGrid(grid: Array<IntArray>): Boolean {
-            for (i in 0 until FIELD_SIZE * FIELD_SIZE) {
+        private fun fillGrid(grid: Array<IntArray>, startPosition: Int = 0): Boolean {
+            for (i in startPosition until FIELD_SIZE * FIELD_SIZE) {
                 val x = i % 9
                 val y = i / 9
 
@@ -78,7 +78,7 @@ class Grid(private val grid: Array<IntArray>) {
                         if (checkGrid(grid)) {
                             return true
                         } else {
-                            if (fillGrid(grid))
+                            if (fillGrid(grid, i + 1))
                                 return true
                         }
                     }
@@ -89,8 +89,8 @@ class Grid(private val grid: Array<IntArray>) {
             return true
         }
 
-        private fun findAllSolutions(grid: Array<IntArray>, foundDecision: Int = 0): List<Array<IntArray>> {
-            for (i in 0 until FIELD_SIZE * FIELD_SIZE) {
+        private fun findAllSolutions(grid: Array<IntArray>, foundDecision: Int = 0, startPosition: Int = 0): List<Array<IntArray>> {
+            for (i in startPosition until FIELD_SIZE * FIELD_SIZE) {
                 val x = i % 9
                 val y = i / 9
 
@@ -109,7 +109,7 @@ class Grid(private val grid: Array<IntArray>) {
                             grid[y][x] = 0
                             return listOf(copyGrid)
                         } else {
-                            decisions += findAllSolutions(grid, foundDecision)
+                            decisions += findAllSolutions(grid, foundDecision, i + 1)
                         }
                     }
                     grid[y][x] = 0

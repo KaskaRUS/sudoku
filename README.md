@@ -8,4 +8,5 @@ To Do:
 2. Limit drawable field by game field
 3. Teach model to recognize digit 1-9 and erase
 4. Add quad size constraint for surface view and position it in the center of screen
-5. Algorithm of first filling field
+5. Check field and show mistakes
+6. Research algorithm of generation sudoku(smarter)
