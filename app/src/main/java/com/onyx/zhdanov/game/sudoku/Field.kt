@@ -6,11 +6,11 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.Region
 import android.util.Log
-import java.lang.StringBuilder
+import com.onyx.zhdanov.game.sudoku.utils.plus
 import kotlin.math.floor
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 class Field(width: Int, height: Int) {
 
@@ -20,14 +20,22 @@ class Field(width: Int, height: Int) {
         color = Color.BLACK
     }
 
-    private var drawableConfiguration: DrawableConfiguration = getDrawableConfiguration(width, height)
-    private val grid = Grid(difficult = 10)
-    private val textBound = Rect()
+    private val mistakeRectPaint = Paint().apply {
+        color = Color.LTGRAY
+    }
 
-    fun draw(refreshRect: RectF = RectF()) {
+    private var drawableConfiguration: DrawableConfiguration = getDrawableConfiguration(width, height)
+    private val grid = Grid(difficult = 1)
+    private val textBound = Rect()
+    private var mistakes = grid.getMistakes()
+
+    fun draw() {
         val canvas = Canvas(bitmap)
-        if (!refreshRect.isEmpty) canvas.clipRect(refreshRect)
         canvas.drawColor(Color.WHITE)
+
+        for (mistake in mistakes) {
+            canvas.drawRect(getCellRect(mistake.x, mistake.y), mistakeRectPaint)
+        }
 
         // horizontal lines
         for (i in 0..FIELD_SIZE) {
@@ -53,12 +61,17 @@ class Field(width: Int, height: Int) {
             for (j in 0 until FIELD_SIZE) {
                 if (grid[i][j] > 0) {
                     val text = grid[i][j].toString()
-                    drawableConfiguration.digitPaint.getTextBounds(text, 0, 1, textBound)
+                    val textPaint = if (mistakes.contains(Coordinate(j, i))) {
+                        drawableConfiguration.boldDigitPaint
+                    } else {
+                        drawableConfiguration.digitPaint
+                    }
+                    textPaint.getTextBounds(text, 0, 1, textBound)
                     val x: Float =
                         drawableConfiguration.paddingX + (j + 0.5f) * drawableConfiguration.cellSize - textBound.exactCenterX()
                     val y: Float =
                         drawableConfiguration.paddingY + (i + 0.5f) * drawableConfiguration.cellSize - textBound.exactCenterY()
-                    canvas.drawText(text, x, y, drawableConfiguration.digitPaint)
+                    canvas.drawText(text, x, y, textPaint)
                 }
             }
         }
@@ -67,7 +80,8 @@ class Field(width: Int, height: Int) {
     fun changeNumber(x: Float, y: Float, newValue: Int) {
         val (j, i) = getCellCoordinates(x, y)
         grid[i][j] = newValue
-        draw(getCellRect(j, i))
+        mistakes = grid.getMistakes()
+        draw()
     }
 
     fun sizeChange(width: Int, height: Int) {
@@ -95,6 +109,9 @@ class Field(width: Int, height: Int) {
         floor((y - drawableConfiguration.paddingY) / drawableConfiguration.cellSize.toDouble()).roundToInt(),
     )
 
+    fun getRectOfMistakes(): List<RectF> =
+        mistakes.map { getCellRect(it.x, it.y) }
+
     private fun getDrawableConfiguration(width: Int, height: Int): DrawableConfiguration {
         Log.i("field", "width: $width, height: $height")
         return if (width < height) {
@@ -104,6 +121,10 @@ class Field(width: Int, height: Int) {
             DrawableConfiguration(
                 digitPaint = Paint().apply {
                     textSize = cellSize * 0.7f
+                },
+                boldDigitPaint = Paint().apply {
+                    textSize = cellSize * 0.7f
+                    isFakeBoldText = true
                 },
                 cellSize = cellSize,
                 paddingX = MIN_PADDING.toFloat(),
@@ -115,6 +136,10 @@ class Field(width: Int, height: Int) {
             DrawableConfiguration(
                 digitPaint = Paint().apply {
                     textSize = cellSize * 0.7f
+                },
+                boldDigitPaint = Paint().apply {
+                    textSize = cellSize * 0.7f
+                    isFakeBoldText = true
                 },
                 cellSize = cellSize,
                 paddingY = MIN_PADDING.toFloat(),
@@ -134,6 +159,7 @@ class Field(width: Int, height: Int) {
 
 data class DrawableConfiguration(
     val digitPaint: Paint,
+    val boldDigitPaint: Paint,
     val cellSize: Float,
     val paddingX: Float,
     val paddingY: Float,

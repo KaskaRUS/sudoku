@@ -19,6 +19,23 @@ class Grid(private val grid: Array<IntArray>) {
         return true
     }
 
+    fun getMistakes(): Set<Coordinate> {
+        val columns = (0 until FIELD_SIZE).flatMap { column ->
+            grid.getDuplicatesIndexesInColumn(column)
+                .map { row -> Coordinate(column, row) }
+        }
+        val row = (0 until FIELD_SIZE).flatMap { row ->
+            grid[row].getDuplicatesIndexes()
+                .map { column -> Coordinate(column, row) }
+        }
+        val sections = (0..2).flatMap { sectionX ->
+            (0..2).flatMap { sectionY ->
+                grid.getDuplicatesIndexesInSection(sectionX, sectionY)
+            }
+        }
+        return  (columns + row + sections).toSet()
+    }
+
     fun findSolution(): Int {
         val allSolutions = findAllSolutions(grid)
         allSolutions.getOrNull(0)?.copyInto(grid)
@@ -101,7 +118,7 @@ class Grid(private val grid: Array<IntArray>) {
 
                     val availableNumbers = column.intersect(row).intersect(section)
 
-                    var decisions = mutableListOf<Array<IntArray>>()
+                    val decisions = mutableListOf<Array<IntArray>>()
                     for (number in availableNumbers) {
                         grid[y][x] = number
                         if (checkGrid(grid)) {
@@ -157,3 +174,32 @@ private fun IntArray.getAvailableNumbers(): Set<Int> {
     availableList.removeAll(this.asIterable())
     return availableList
 }
+
+private fun Array<IntArray>.getDuplicatesIndexesInColumn(ind: Int): List<Int> {
+    val list = this.map { it[ind] }
+    return list.mapIndexedNotNull { index, value ->
+        if (value > 0 && list.filterIndexed { ind, i -> ind != index && i == value }.isNotEmpty()) index else null
+    }
+}
+
+private fun IntArray.getDuplicatesIndexes(): List<Int> {
+    val list = this.toList()
+    return list.mapIndexedNotNull { index, value ->
+        if (value > 0 && list.filterIndexed { ind, i -> ind != index && i == value }.isNotEmpty()) index else null
+    }
+}
+
+private fun Array<IntArray>.getDuplicatesIndexesInSection(sectionX: Int, sectionY: Int): List<Coordinate> {
+    val list = (0..8).map { ind -> this[sectionY * 3 + ind / 3][sectionX * 3 + ind % 3] }
+
+    return list.mapIndexedNotNull { index, value ->
+        if (value > 0 && list.filterIndexed { ind, i -> ind != index && i == value }.isNotEmpty()) {
+            Coordinate(index % 3 + sectionX * 3, index / 3 + sectionY * 3)
+        } else null
+    }
+}
+
+data class Coordinate(
+    val x: Int,
+    val y: Int
+)

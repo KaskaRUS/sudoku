@@ -27,17 +27,21 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
 
         val field = Field(width = limit.width(), height = limit.height())
 
+        val penHandler = PenHandler(
+            width = limit.width(),
+            height = limit.height(),
+            context = context,
+            surfaceView = this,
+            field = field,
+            recognizeHandler = recognizeHandler
+        )
         val touchHelper = TouchHelper.create(
             this,
-            PenHandler(
-                width = limit.width(),
-                height = limit.height(),
-                context = context,
-                surfaceView = this,
-                field = field,
-                recognizeHandler = recognizeHandler
-            )
+            penHandler
         )
+
+        penHandler.touchHelper = touchHelper
+
         touchHelper.setLimitRect(limit, ArrayList<Rect>())
             .setStrokeWidth(3f)
             .openRawDrawing()

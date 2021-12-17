@@ -1,5 +1,7 @@
 package space.zhdanov.games.test
 
+import android.graphics.Point
+import com.onyx.zhdanov.game.sudoku.Coordinate
 import com.onyx.zhdanov.game.sudoku.Grid
 import org.junit.Test
 
@@ -99,5 +101,60 @@ class GridTest {
         ))
         val solutions = grid.findSolution()
         assertEquals(1, solutions)
+    }
+
+    @Test
+    fun `must return list of mistakes`() {
+        val grid = Grid(arrayOf(
+            intArrayOf(1, 2, 3, 4, 5, 5, 7, 8, 9),
+            intArrayOf(4, 5, 6, 7, 8, 9, 1, 2, 3),
+            intArrayOf(7, 8, 9, 1, 2, 3, 4, 5, 6),
+            intArrayOf(2, 3, 4, 5, 6, 7, 8, 9, 1),
+            intArrayOf(5, 6, 7, 8, 0, 1, 2, 3, 4),
+            intArrayOf(8, 9, 1, 2, 3, 4, 5, 6, 7),
+            intArrayOf(3, 4, 5, 6, 7, 8, 9, 1, 2),
+            intArrayOf(6, 7, 8, 9, 1, 2, 3, 4, 3),
+            intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8),
+        ))
+        assertEquals(setOf(
+            Coordinate(4, 0),
+            Coordinate(5, 0),
+            Coordinate(5,8),
+            Coordinate(8,1),
+            Coordinate(8,7),
+            Coordinate(6,7)
+        ), grid.getMistakes())
+    }
+
+    @Test
+    fun `must return empty list of mistakes for not full grid`() {
+        val grid = Grid(arrayOf(
+            intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
+            intArrayOf(4, 5, 6, 7, 8, 9, 1, 2, 3),
+            intArrayOf(7, 8, 9, 1, 2, 3, 4, 5, 6),
+            intArrayOf(2, 3, 4, 5, 6, 7, 8, 9, 1),
+            intArrayOf(5, 6, 7, 8, 0, 1, 2, 3, 4),
+            intArrayOf(8, 9, 1, 2, 3, 4, 5, 6, 7),
+            intArrayOf(3, 4, 5, 6, 7, 8, 9, 1, 2),
+            intArrayOf(6, 7, 8, 9, 1, 2, 3, 4, 0),
+            intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8),
+        ))
+        assertEquals(setOf<Coordinate>(), grid.getMistakes())
+    }
+
+    @Test
+    fun `must return empty list of mistakes for full success grid`() {
+        val grid = Grid(arrayOf(
+            intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
+            intArrayOf(4, 5, 6, 7, 8, 9, 1, 2, 3),
+            intArrayOf(7, 8, 9, 1, 2, 3, 4, 5, 6),
+            intArrayOf(2, 3, 4, 5, 6, 7, 8, 9, 1),
+            intArrayOf(5, 6, 7, 8, 9, 1, 2, 3, 4),
+            intArrayOf(8, 9, 1, 2, 3, 4, 5, 6, 7),
+            intArrayOf(3, 4, 5, 6, 7, 8, 9, 1, 2),
+            intArrayOf(6, 7, 8, 9, 1, 2, 3, 4, 5),
+            intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8),
+        ))
+        assertEquals(setOf<Coordinate>(), grid.getMistakes())
     }
 }

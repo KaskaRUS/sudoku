@@ -12,6 +12,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.SurfaceView
 import com.onyx.android.sdk.pen.RawInputCallback
+import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPoint
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.onyx.android.sdk.rx.RxCallback
@@ -29,12 +30,14 @@ class PenHandler(
     private val surfaceView: SurfaceView,
     private val field: Field,
     private val recognizeHandler: RecognizeHandler
-): RawInputCallback() {
+) : RawInputCallback() {
     private val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     private val canvas: Canvas = Canvas(bitmap)
     private val rxManager = RxManager.Builder.sharedSingleThreadManager()
     private val drawRect: RectF = RectF(startRect)
     private val uiHandler: Handler = Handler()
+
+    lateinit var touchHelper: TouchHelper
 
     override fun onBeginRawDrawing(p0: Boolean, p1: TouchPoint) {
     }
@@ -79,9 +82,9 @@ class PenHandler(
         val partialRefreshRequest = PartialRefreshRequest(
             context = context,
             surfaceView = surfaceView,
-            bitmap = bitmap,
             fieldBitmap = field.bitmap,
-            refreshRect = cellRect + refreshRect
+            refreshRect = listOf(cellRect + refreshRect),
+            touchHelper = touchHelper,
         )
 
         drawRect.set(startRect)
@@ -91,6 +94,7 @@ class PenHandler(
                 override fun onNext(request: RecognizeRequest) {
                     Log.i("recognize", "response: ${request.recognizedDigit}")
                     Log.i("recognize", "recognize rect: ${request.rectf}")
+                    val lastMistakeRects = field.getRectOfMistakes()
                     field.changeNumber(request.rectf.centerX(), request.rectf.centerY(), request.recognizedDigit)
 
                     rxManager.enqueue(
@@ -102,6 +106,18 @@ class PenHandler(
                                     canvas.drawColor(Color.WHITE)
                                 }
                             }
+                        }
+                    )
+                    rxManager.enqueue(
+                        PartialRefreshRequest(
+                            context = context,
+                            surfaceView = surfaceView,
+                            fieldBitmap = field.bitmap,
+                            refreshRect = field.getRectOfMistakes() + lastMistakeRects,
+                            touchHelper = touchHelper,
+                        ),
+                        object : RxCallback<PartialRefreshRequest>() {
+                            override fun onNext(partialRefreshRequest: PartialRefreshRequest) {}
                         }
                     )
                 }
