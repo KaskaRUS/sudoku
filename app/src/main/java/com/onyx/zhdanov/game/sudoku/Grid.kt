@@ -6,6 +6,8 @@ class Grid(private val grid: Array<IntArray>) {
 
     constructor(difficult: Int = 1) : this(generateNewGrid(difficult))
 
+    private val firstRepresentation = grid.map { it.copyOf() }.toTypedArray()
+
     fun checkSuccess(): Boolean {
         for (i in 0..8) {
             if (grid.getAvailableNumbersInColumn(i).isNotEmpty()) return false
@@ -41,6 +43,9 @@ class Grid(private val grid: Array<IntArray>) {
         allSolutions.getOrNull(0)?.copyInto(grid)
         return allSolutions.size
     }
+
+    fun isStartedCell(x: Int, y: Int): Boolean =
+        firstRepresentation[y][x] != 0
 
     override fun toString(): String {
         val buffer = StringBuilder()

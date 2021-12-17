@@ -61,7 +61,7 @@ class Field(width: Int, height: Int) {
             for (j in 0 until FIELD_SIZE) {
                 if (grid[i][j] > 0) {
                     val text = grid[i][j].toString()
-                    val textPaint = if (mistakes.contains(Coordinate(j, i))) {
+                    val textPaint = if (grid.isStartedCell(j, i)) {
                         drawableConfiguration.boldDigitPaint
                     } else {
                         drawableConfiguration.digitPaint
@@ -120,10 +120,10 @@ class Field(width: Int, height: Int) {
 
             DrawableConfiguration(
                 digitPaint = Paint().apply {
-                    textSize = cellSize * 0.7f
+                    textSize = cellSize * 0.8f
                 },
                 boldDigitPaint = Paint().apply {
-                    textSize = cellSize * 0.7f
+                    textSize = cellSize * 0.6f
                     isFakeBoldText = true
                 },
                 cellSize = cellSize,
@@ -135,10 +135,10 @@ class Field(width: Int, height: Int) {
             Log.i("field", "cellSize: $cellSize")
             DrawableConfiguration(
                 digitPaint = Paint().apply {
-                    textSize = cellSize * 0.7f
+                    textSize = cellSize * 0.8f
                 },
                 boldDigitPaint = Paint().apply {
-                    textSize = cellSize * 0.7f
+                    textSize = cellSize * 0.6f
                     isFakeBoldText = true
                 },
                 cellSize = cellSize,
