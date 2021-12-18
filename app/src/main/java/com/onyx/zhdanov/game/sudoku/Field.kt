@@ -150,6 +150,9 @@ class Field(width: Int, height: Int) {
         }
     }
 
+    fun isSuccess() =
+        grid.checkSuccess()
+
     companion object {
         const val MIN_PADDING = 20
         const val BOLD_LINE_WEIGHT = 6f

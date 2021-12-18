@@ -29,7 +29,8 @@ class PenHandler(
     private val context: Context,
     private val surfaceView: SurfaceView,
     private val field: Field,
-    private val recognizeHandler: RecognizeHandler
+    private val recognizeHandler: RecognizeHandler,
+    val onSuccess: (score: Long) -> Unit
 ) : RawInputCallback() {
     private val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     private val canvas: Canvas = Canvas(bitmap)
@@ -104,6 +105,13 @@ class PenHandler(
                                 Log.i("draw", "refresh")
                                 uiHandler.post {
                                     canvas.drawColor(Color.WHITE)
+                                    if (field.isSuccess()) {
+                                        onSuccess(0)
+
+                                        touchHelper
+                                            .setRawDrawingRenderEnabled(false)
+                                            .setRawDrawingEnabled(false)
+                                    }
                                 }
                             }
                         }

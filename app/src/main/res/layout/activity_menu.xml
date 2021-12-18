@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                                             android:theme="@style/ThemeOverlay.Sudoku.FullscreenContainer"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="?attr/fullscreenBackgroundColor"
+                                             tools:context="com.onyx.zhdanov.game.sudoku.MenuActivity" android:id="@+id/frameLayout">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/frameLayout2"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView android:id="@+id/app_title"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/fullscreenTextColor"
+                  android:keepScreenOn="true"
+                  android:textStyle="bold"
+                  android:textSize="50sp"
+                  android:gravity="center"
+                  android:text="@string/app_name"
+                  app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"/>
+        <Button
+                android:text="@string/start_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/start"
+                app:layout_constraintTop_toBottomOf="@+id/app_title"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="1.0"/>
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

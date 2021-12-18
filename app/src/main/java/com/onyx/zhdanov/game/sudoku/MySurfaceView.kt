@@ -1,10 +1,12 @@
 package com.onyx.zhdanov.game.sudoku
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
+import android.view.PixelCopy
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.onyx.android.sdk.data.PenConstant
@@ -14,6 +16,7 @@ import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
 
     private val recognizeHandler = RecognizeHandler(context)
+    lateinit var onSuccess: (score: Long) -> Unit
 
     init {
         Log.i("surface", "created")
@@ -34,7 +37,9 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
             surfaceView = this,
             field = field,
             recognizeHandler = recognizeHandler
-        )
+        ) {
+            onSuccess(it)
+        }
         val touchHelper = TouchHelper.create(
             this,
             penHandler
@@ -60,6 +65,14 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
 
+    }
+
+    fun getBitmap(): Bitmap {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+//        val c = Canvas(bitmap)
+//        draw(c)
+        PixelCopy.request(this, bitmap, PixelCopy.OnPixelCopyFinishedListener {  }, handler);
+        return bitmap
     }
 
     private fun cleanSurfaceView(field: Field) {
