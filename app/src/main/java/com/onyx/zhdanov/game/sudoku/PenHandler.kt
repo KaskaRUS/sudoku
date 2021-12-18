@@ -79,14 +79,6 @@ class PenHandler(
             recognizeHandler = recognizeHandler
         )
 
-        val partialRefreshRequest = PartialRefreshRequest(
-            context = context,
-            surfaceView = surfaceView,
-            fieldBitmap = field.bitmap,
-            refreshRect = listOf(cellRect + refreshRect),
-            touchHelper = touchHelper,
-        )
-
         drawRect.set(startRect)
         rxManager.enqueue(
             recognizeRequest,
@@ -97,6 +89,14 @@ class PenHandler(
                     val lastMistakeRects = field.getRectOfMistakes()
                     field.changeNumber(request.rectf.centerX(), request.rectf.centerY(), request.recognizedDigit)
 
+                    val partialRefreshRequest = PartialRefreshRequest(
+                        context = context,
+                        surfaceView = surfaceView,
+                        fieldBitmap = field.bitmap,
+                        refreshRect = listOf(cellRect + refreshRect) + field.getRectOfMistakes() + lastMistakeRects,
+                        touchHelper = touchHelper,
+                    )
+
                     rxManager.enqueue(
                         partialRefreshRequest,
                         object : RxCallback<PartialRefreshRequest>() {
@@ -106,18 +106,6 @@ class PenHandler(
                                     canvas.drawColor(Color.WHITE)
                                 }
                             }
-                        }
-                    )
-                    rxManager.enqueue(
-                        PartialRefreshRequest(
-                            context = context,
-                            surfaceView = surfaceView,
-                            fieldBitmap = field.bitmap,
-                            refreshRect = field.getRectOfMistakes() + lastMistakeRects,
-                            touchHelper = touchHelper,
-                        ),
-                        object : RxCallback<PartialRefreshRequest>() {
-                            override fun onNext(partialRefreshRequest: PartialRefreshRequest) {}
                         }
                     )
                 }

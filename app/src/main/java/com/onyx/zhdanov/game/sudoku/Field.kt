@@ -79,9 +79,11 @@ class Field(width: Int, height: Int) {
 
     fun changeNumber(x: Float, y: Float, newValue: Int) {
         val (j, i) = getCellCoordinates(x, y)
-        grid[i][j] = newValue
-        mistakes = grid.getMistakes()
-        draw()
+        if (!grid.isStartedCell(j, i)) {
+            grid[i][j] = newValue
+            mistakes = grid.getMistakes()
+            draw()
+        }
     }
 
     fun sizeChange(width: Int, height: Int) {
