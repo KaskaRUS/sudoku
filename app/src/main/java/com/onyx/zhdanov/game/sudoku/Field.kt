@@ -12,7 +12,7 @@ import com.onyx.zhdanov.game.sudoku.utils.plus
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
-class Field(width: Int, height: Int) {
+class Field(width: Int, height: Int, val grid: Grid) {
 
     var bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
@@ -25,7 +25,6 @@ class Field(width: Int, height: Int) {
     }
 
     private var drawableConfiguration: DrawableConfiguration = getDrawableConfiguration(width, height)
-    private val grid = Grid(difficult = 1)
     private val textBound = Rect()
     private var mistakes = grid.getMistakes()
 

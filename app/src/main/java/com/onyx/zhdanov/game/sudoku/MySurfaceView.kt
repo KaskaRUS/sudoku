@@ -16,7 +16,9 @@ import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
 
     private val recognizeHandler = RecognizeHandler(context)
+
     lateinit var onSuccess: (score: Long) -> Unit
+    lateinit var grid: Grid
 
     init {
         Log.i("surface", "created")
@@ -28,7 +30,7 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
         val limit = Rect()
         this.getLocalVisibleRect(limit)
 
-        val field = Field(width = limit.width(), height = limit.height())
+        val field = Field(width = limit.width(), height = limit.height(), grid)
 
         val penHandler = PenHandler(
             width = limit.width(),
@@ -69,9 +71,7 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
 
     fun getBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-//        val c = Canvas(bitmap)
-//        draw(c)
-        PixelCopy.request(this, bitmap, PixelCopy.OnPixelCopyFinishedListener {  }, handler);
+        PixelCopy.request(this, bitmap, {}, handler);
         return bitmap
     }
 
