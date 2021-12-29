@@ -23,14 +23,19 @@ class MenuActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        binding.isLoading.visibility = View.INVISIBLE
 
-        val startButton = binding.start
 
-        startButton.setOnClickListener {
-            Log.d("menu", "start")
+        val startGame: (View) -> Unit = {
+            binding.isLoading.visibility = View.VISIBLE
             val intent = Intent(this, FullscreenActivity::class.java)
+            intent.putExtra("difficult", it.tag.toString().toInt())
             startActivity(intent)
         }
+
+        binding.easy.setOnClickListener(startGame)
+        binding.medium.setOnClickListener(startGame)
+        binding.hard.setOnClickListener(startGame)
     }
 
 

@@ -142,16 +142,10 @@ class PenHandler(
     companion object {
         val paint = Paint().apply {
             isAntiAlias = true
-            strokeWidth = 10f
+            strokeWidth = 13f
             style = Paint.Style.STROKE
             color = Color.BLACK
         }
-
-        val paintCleaner = Paint().apply {
-            style = Paint.Style.FILL
-            color = Color.WHITE
-        }
-
 
         private val startRect = RectF(10000f, 10000f, 0f, 0f)
     }

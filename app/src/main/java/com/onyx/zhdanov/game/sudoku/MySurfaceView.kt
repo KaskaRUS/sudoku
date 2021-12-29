@@ -50,7 +50,7 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
         penHandler.touchHelper = touchHelper
 
         touchHelper.setLimitRect(limit, ArrayList<Rect>())
-            .setStrokeWidth(3f)
+            .setStrokeWidth(10f)
             .openRawDrawing()
 
         touchHelper.setRawDrawingEnabled(false)

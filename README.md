@@ -6,7 +6,5 @@ Support pen.
 To Do:
 1. Refactoring logs
 2. Limit drawable field by game field
-3. Teach model to recognize digit 1-9 and erase
-4. Add quad size constraint for surface view and position it in the center of screen
-5. Research algorithm of generation sudoku(smarter)
-6. Add learning in process game
+3. Research algorithm of generation sudoku(smarter)
+4. Add learning to recognize digit in process game

@@ -20,7 +20,8 @@ class FullscreenActivity : AppCompatActivity() {
 
         val binding = ActivityFullscreenBinding.inflate(layoutInflater)
         surfaceView = binding.surfaceView
-        surfaceView.grid = Grid(intent.getIntExtra("difficult", 1))
+        difficult = intent.getIntExtra("difficult", difficult)
+        surfaceView.grid = Grid(difficult)
 
         setContentView(binding.root)
 
@@ -42,5 +43,6 @@ class FullscreenActivity : AppCompatActivity() {
 
     companion object {
         var background: Bitmap? = null
+        private var difficult = 1
     }
 }
