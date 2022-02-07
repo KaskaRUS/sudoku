@@ -31,26 +31,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/isLoading"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
         <Button
                 android:text="@string/easy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag = "1"
-                android:id="@+id/easy" />
+                android:tag="1"
+                android:id="@+id/easy"/>
         <Button
                 android:text="@string/medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag = "5"
-                android:id="@+id/medium" />
+                android:tag="5"
+                android:id="@+id/medium"/>
         <Button
                 android:text="@string/hard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag = "10"
-                android:id="@+id/hard" />
+                android:tag="10"
+                android:id="@+id/hard"/>
     </LinearLayout>
+    <TextView
+            android:text="@string/contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/email"
+            android:autoLink="email"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:textSize="20sp" android:layout_marginBottom="8dp"/>
 
 
 </android.support.constraint.ConstraintLayout>

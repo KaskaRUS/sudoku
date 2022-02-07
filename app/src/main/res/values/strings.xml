@@ -11,4 +11,5 @@
     <string name="medium">medium</string>
     <string name="hard">hard</string>
     <string name="field_generation">Field generation...</string>
+    <string name="contacts">Contact me: sudoku@zhdanov.space</string>
 </resources>
