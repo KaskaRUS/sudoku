@@ -25,8 +25,6 @@ class RecognizeHandler(context: Context) {
         inputImageWidth = inputShape[1]
         inputImageHeight = inputShape[2]
         modelInputSize = FLOAT_TYPE_SIZE * inputImageWidth * inputImageHeight * PIXEL_SIZE
-
-        Log.i("recognize", "width: $inputImageWidth, height: $inputImageHeight")
     }
 
     fun recognize(bitmap: Bitmap): Int {
@@ -48,15 +46,9 @@ class RecognizeHandler(context: Context) {
             buf.append('\n')
         }
         Log.i("recognize", buf.toString())
-
-        // Define an array to store the model output.
         val output = Array(1) { FloatArray(OUTPUT_CLASSES_COUNT) }
 
-        // Run inference with the input data.
         interpreter.run(byteBuffer, output)
-
-        // Post-processing: find the digit that has the highest probability
-        // and return it a human-readable string.
         val result = output[0]
 
         Log.i("recognize", "recognized vector ${result.joinToString()}")

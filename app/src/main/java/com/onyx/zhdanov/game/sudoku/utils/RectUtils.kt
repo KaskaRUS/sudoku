@@ -11,3 +11,40 @@ operator fun RectF.plus(rectF: RectF) =
         max(this.right, rectF.right),
         max(this.bottom, rectF.bottom),
     )
+
+fun RectF.intersection(rectF: RectF) =
+    RectF(
+        max(this.left, rectF.left),
+        max(this.top, rectF.top),
+        min(this.right, rectF.right),
+        min(this.bottom, rectF.bottom),
+    )
+
+// to rect
+fun RectF.normalize() =
+    if (this.height() > this.width()) {
+        val dt = (this.height() - this.width()) / 2
+        RectF(
+            this.left - dt,
+            this.top,
+            this.right + dt,
+            this.bottom
+        )
+    } else {
+        val dt = (this.width() - this.height()) / 2
+
+        RectF(
+            this.left,
+            this.top - dt,
+            this.right,
+            this.bottom + dt
+        )
+    }
+
+fun RectF.extend(value: Float) =
+    RectF(
+        this.left - value,
+        this.top - value,
+        this.right + value,
+        this.bottom + value,
+    )

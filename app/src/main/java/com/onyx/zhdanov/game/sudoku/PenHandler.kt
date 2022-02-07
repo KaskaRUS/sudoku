@@ -19,6 +19,9 @@ import com.onyx.android.sdk.rx.RxCallback
 import com.onyx.android.sdk.rx.RxManager
 import com.onyx.zhdanov.game.sudoku.requests.PartialRefreshRequest
 import com.onyx.zhdanov.game.sudoku.requests.RecognizeRequest
+import com.onyx.zhdanov.game.sudoku.utils.extend
+import com.onyx.zhdanov.game.sudoku.utils.intersection
+import com.onyx.zhdanov.game.sudoku.utils.normalize
 import com.onyx.zhdanov.game.sudoku.utils.plus
 import kotlin.math.max
 import kotlin.math.min
@@ -70,13 +73,13 @@ class PenHandler(
 
         Log.i("pen", "draw rect: ${drawRect}")
         Log.i("pen", "rect size: ${drawRect.width()} : ${drawRect.height()}")
-        Log.i("pen", "rect center: ${drawRect.centerX()} : ${drawRect.centerY()}")
 
         val cellRect = field.getCellRect(drawRect)
+        val normalized = cellRect.intersection(drawRect).normalize()
 
         val recognizeRequest = RecognizeRequest(
             bitmap = bitmap,
-            rectf = cellRect,
+            rectf = normalized.extend(normalized.width() / 5),
             recognizeHandler = recognizeHandler
         )
 
@@ -102,7 +105,6 @@ class PenHandler(
                         partialRefreshRequest,
                         object : RxCallback<PartialRefreshRequest>() {
                             override fun onNext(partialRefreshRequest: PartialRefreshRequest) {
-                                Log.i("draw", "refresh")
                                 uiHandler.post {
                                     canvas.drawColor(Color.WHITE)
                                     if (field.isSuccess()) {

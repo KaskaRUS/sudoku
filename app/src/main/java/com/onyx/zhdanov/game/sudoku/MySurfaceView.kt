@@ -21,12 +21,10 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
     lateinit var grid: Grid
 
     init {
-        Log.i("surface", "created")
         holder.addCallback(this@MySurfaceView)
     }
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        Log.i("surface", "holder created")
         val limit = Rect()
         this.getLocalVisibleRect(limit)
 
