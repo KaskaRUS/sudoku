@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import com.onyx.android.sdk.rx.RxManager
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityMenuBinding
@@ -28,7 +27,7 @@ class MenuActivity : AppCompatActivity() {
 
         val startGame: (View) -> Unit = {
             binding.isLoading.visibility = View.VISIBLE
-            val intent = Intent(this, FullscreenActivity::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             intent.putExtra("difficult", it.tag.toString().toInt())
             startActivity(intent)
         }

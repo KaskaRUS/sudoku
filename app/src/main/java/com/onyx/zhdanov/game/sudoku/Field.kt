@@ -10,6 +10,7 @@ import android.graphics.Region
 import android.util.Log
 import com.onyx.zhdanov.game.sudoku.utils.plus
 import kotlin.math.floor
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 class Field(width: Int, height: Int, val grid: Grid) {
@@ -114,39 +115,22 @@ class Field(width: Int, height: Int, val grid: Grid) {
         mistakes.map { getCellRect(it.x, it.y) }
 
     private fun getDrawableConfiguration(width: Int, height: Int): DrawableConfiguration {
-        Log.i("field", "width: $width, height: $height")
-        return if (width < height) {
-            val cellSize = (width - 2 * MIN_PADDING) / FIELD_SIZE.toFloat()
-            Log.i("field", "cellSize: $cellSize")
+        val cellSize = (min(width, height) - 2 * MIN_PADDING) / FIELD_SIZE.toFloat()
 
-            DrawableConfiguration(
-                digitPaint = Paint().apply {
-                    textSize = cellSize * 0.8f
-                },
-                boldDigitPaint = Paint().apply {
-                    textSize = cellSize * 0.6f
-                    isFakeBoldText = true
-                },
-                cellSize = cellSize,
-                paddingX = MIN_PADDING.toFloat(),
-                paddingY = (height - cellSize * FIELD_SIZE) / 2
-            )
-        } else {
-            val cellSize = (height - 2 * MIN_PADDING) / FIELD_SIZE.toFloat()
-            Log.i("field", "cellSize: $cellSize")
-            DrawableConfiguration(
-                digitPaint = Paint().apply {
-                    textSize = cellSize * 0.8f
-                },
-                boldDigitPaint = Paint().apply {
-                    textSize = cellSize * 0.6f
-                    isFakeBoldText = true
-                },
-                cellSize = cellSize,
-                paddingY = MIN_PADDING.toFloat(),
-                paddingX = (width - cellSize * FIELD_SIZE) / 2
-            )
-        }
+        return DrawableConfiguration(
+            width = width,
+            height = height,
+            digitPaint = Paint().apply {
+                textSize = cellSize * 0.8f
+            },
+            boldDigitPaint = Paint().apply {
+                textSize = cellSize * 0.6f
+                isFakeBoldText = true
+            },
+            cellSize = cellSize,
+            paddingX = (width - cellSize * FIELD_SIZE) / 2,
+            paddingY = (height - cellSize * FIELD_SIZE) / 2
+        )
     }
 
     fun isSuccess() =
@@ -167,4 +151,6 @@ data class DrawableConfiguration(
     val cellSize: Float,
     val paddingX: Float,
     val paddingY: Float,
+    val width: Int,
+    val height: Int,
 )

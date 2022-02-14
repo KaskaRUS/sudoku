@@ -8,9 +8,9 @@ import android.view.Window
 import android.view.WindowManager
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityFullscreenBinding
 
-class FullscreenActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity() {
 
-    lateinit var surfaceView: MySurfaceView
+    lateinit var surfaceView: GameView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +21,7 @@ class FullscreenActivity : AppCompatActivity() {
         val binding = ActivityFullscreenBinding.inflate(layoutInflater)
         surfaceView = binding.surfaceView
         difficult = intent.getIntExtra("difficult", difficult)
+        tutorial = intent.getBooleanExtra("tutorial", false)
         surfaceView.grid = Grid(difficult)
 
         setContentView(binding.root)
@@ -44,5 +45,6 @@ class FullscreenActivity : AppCompatActivity() {
     companion object {
         var background: Bitmap? = null
         private var difficult = 1
+        private var tutorial = false
     }
 }

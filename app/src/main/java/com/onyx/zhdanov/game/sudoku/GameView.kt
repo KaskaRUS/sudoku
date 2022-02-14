@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.PixelCopy
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -13,7 +12,7 @@ import com.onyx.android.sdk.data.PenConstant
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 
-class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
+class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
 
     private val recognizeHandler = RecognizeHandler(context)
 
@@ -21,7 +20,7 @@ class MySurfaceView(context: Context, attrs: AttributeSet?) : SurfaceView(contex
     lateinit var grid: Grid
 
     init {
-        holder.addCallback(this@MySurfaceView)
+        holder.addCallback(this@GameView)
     }
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {

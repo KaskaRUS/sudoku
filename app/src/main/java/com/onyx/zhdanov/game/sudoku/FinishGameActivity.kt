@@ -29,7 +29,7 @@ class FinishGameActivity : AppCompatActivity() {
 
         titleText.text = intent.getStringExtra("title")
 
-        FullscreenActivity.background?.let { background ->
+        GameActivity.background?.let { background ->
             binding.root.background = BitmapDrawable(resources, background)
         }
 
@@ -38,7 +38,7 @@ class FinishGameActivity : AppCompatActivity() {
         }
 
         retryButton.setOnClickListener {
-            startActivity(Intent(this, FullscreenActivity::class.java))
+            startActivity(Intent(this, GameActivity::class.java))
         }
     }
 }

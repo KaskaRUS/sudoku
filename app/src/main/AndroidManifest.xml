@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".FullscreenActivity"
+                android:name=".GameActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_menu"
                 android:theme="@style/Theme.AppCompat.Light.Fullscreen"/>
