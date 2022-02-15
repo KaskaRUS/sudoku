@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/content"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <com.onyx.zhdanov.game.sudoku.GameView
+            android:id="@+id/surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    <include android:layout_width="400dp" android:layout_height="wrap_content"
+             layout="@layout/dialog"
+             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+             android:layout_marginTop="32dp" android:layout_marginStart="32dp"/>
+
+</android.support.constraint.ConstraintLayout>

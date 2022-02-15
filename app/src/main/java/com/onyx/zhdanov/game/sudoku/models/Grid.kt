@@ -1,10 +1,11 @@
-package com.onyx.zhdanov.game.sudoku
+package com.onyx.zhdanov.game.sudoku.models
 
 import java.lang.StringBuilder
 
-class Grid(private val grid: Array<IntArray>) {
+class Grid(private val grid: Array<IntArray>, private val onSuccess: (score: Int) -> Unit) {
+    var mistakes: Set<Coordinate> = setOf()
 
-    constructor(difficult: Int = 1) : this(generateNewGrid(difficult))
+    constructor(difficult: Int = 1, onSuccess: (score: Int) -> Unit) : this(generateNewGrid(difficult), onSuccess)
 
     private val firstRepresentation = grid.map { it.copyOf() }.toTypedArray()
 
@@ -21,7 +22,7 @@ class Grid(private val grid: Array<IntArray>) {
         return true
     }
 
-    fun getMistakes(): Set<Coordinate> {
+    private fun findMistakes(): Set<Coordinate> {
         val columns = (0 until FIELD_SIZE).flatMap { column ->
             grid.getDuplicatesIndexesInColumn(column)
                 .map { row -> Coordinate(column, row) }
@@ -46,6 +47,19 @@ class Grid(private val grid: Array<IntArray>) {
 
     fun isStartedCell(x: Int, y: Int): Boolean =
         firstRepresentation[y][x] != 0
+
+    fun changeCell(x: Int, y: Int, newValue: Int): Boolean {
+        return if (isStartedCell(x, y)) {
+            return false
+        } else {
+            grid[y][x] = newValue
+            mistakes = findMistakes()
+            if (checkSuccess()) {
+                onSuccess(0)
+            }
+            true
+        }
+    }
 
     override fun toString(): String {
         val buffer = StringBuilder()

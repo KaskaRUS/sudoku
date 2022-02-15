@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku
+package com.onyx.zhdanov.game.sudoku.models
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -27,13 +27,12 @@ class Field(width: Int, height: Int, val grid: Grid) {
 
     private var drawableConfiguration: DrawableConfiguration = getDrawableConfiguration(width, height)
     private val textBound = Rect()
-    private var mistakes = grid.getMistakes()
 
     fun draw() {
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 
-        for (mistake in mistakes) {
+        for (mistake in grid.mistakes) {
             canvas.drawRect(getCellRect(mistake.x, mistake.y), mistakeRectPaint)
         }
 
@@ -77,15 +76,6 @@ class Field(width: Int, height: Int, val grid: Grid) {
         }
     }
 
-    fun changeNumber(x: Float, y: Float, newValue: Int) {
-        val (j, i) = getCellCoordinates(x, y)
-        if (!grid.isStartedCell(j, i)) {
-            grid[i][j] = newValue
-            mistakes = grid.getMistakes()
-            draw()
-        }
-    }
-
     fun sizeChange(width: Int, height: Int) {
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         drawableConfiguration = getDrawableConfiguration(width, height)
@@ -93,11 +83,10 @@ class Field(width: Int, height: Int, val grid: Grid) {
 
     fun getCellRect(refreshRect: RectF): RectF {
         val (j, i) = getCellCoordinates(refreshRect.centerX(), refreshRect.centerY())
-        Log.i("field", "x: $j, y: $i")
         return getCellRect(j, i)
     }
 
-    private fun getCellRect(j: Int, i: Int): RectF {
+    fun getCellRect(j: Int, i: Int): RectF {
         return RectF(
             drawableConfiguration.paddingX + j * drawableConfiguration.cellSize,
             drawableConfiguration.paddingY + i * drawableConfiguration.cellSize,
@@ -112,7 +101,7 @@ class Field(width: Int, height: Int, val grid: Grid) {
     )
 
     fun getRectOfMistakes(): List<RectF> =
-        mistakes.map { getCellRect(it.x, it.y) }
+        grid.mistakes.map { getCellRect(it.x, it.y) }
 
     private fun getDrawableConfiguration(width: Int, height: Int): DrawableConfiguration {
         val cellSize = (min(width, height) - 2 * MIN_PADDING) / FIELD_SIZE.toFloat()
@@ -133,15 +122,11 @@ class Field(width: Int, height: Int, val grid: Grid) {
         )
     }
 
-    fun isSuccess() =
-        grid.checkSuccess()
-
     companion object {
         const val MIN_PADDING = 20
         const val BOLD_LINE_WEIGHT = 6f
         const val STROKE_LINE_WEIGHT = 2f
         const val FIELD_SIZE = 9
-        const val EMPTY_CELL_VALUE = 0
     }
 }
 

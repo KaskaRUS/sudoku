@@ -1,0 +1,23 @@
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="400dp"
+        android:layout_height="124dp" android:id="@+id/view"
+        android:background="@color/white"
+        android:padding="8dp">
+    <TextView
+            android:text="Each 3×3 box can only contain each number from 1 to 9 once"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/textDialog"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:textSize="24sp"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:textColor="@color/black"/>
+    <Button
+            android:text="@string/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/buttonNext"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDialog"/>
+</android.support.constraint.ConstraintLayout>

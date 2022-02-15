@@ -14,12 +14,13 @@ import com.onyx.android.sdk.api.device.epd.UpdateMode
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.rx.RxRequest
 import com.onyx.android.sdk.utils.RectUtils
+import com.onyx.zhdanov.game.sudoku.GameView
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 import com.onyx.zhdanov.game.sudoku.utils.plus
 
 class PartialRefreshRequest(
     context: Context,
-    private val surfaceView: SurfaceView,
+    private val surfaceView: GameView,
     private val refreshRect: List<RectF>,
     private val fieldBitmap: Bitmap,
     private val touchHelper: TouchHelper
@@ -30,7 +31,7 @@ class PartialRefreshRequest(
         renderToScreen(surfaceView)
     }
 
-    private fun renderToScreen(surfaceView: SurfaceView) {
+    private fun renderToScreen(surfaceView: GameView) {
         touchHelper.setRawDrawingRenderEnabled(false)
         EpdController.setViewDefaultUpdateMode(surfaceView, UpdateMode.HAND_WRITING_REPAINT_MODE)
         val bounds = refreshRect.reduce { acc, rectF -> acc + rectF }
@@ -38,8 +39,11 @@ class PartialRefreshRequest(
         val canvas = surfaceView.holder.lockCanvas(renderRect)
         try {
             canvas.clipRect(bounds)
-            canvas.drawColor(Color.WHITE)
-            drawRendererContent(fieldBitmap, canvas)
+            surfaceView.onRender?.let { it(canvas) }
+                ?: run {
+                    canvas.drawColor(Color.WHITE)
+                    drawRendererContent(fieldBitmap, canvas)
+                }
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {

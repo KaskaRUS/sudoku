@@ -10,13 +10,13 @@ import android.graphics.PointF
 import android.graphics.RectF
 import android.os.Handler
 import android.util.Log
-import android.view.SurfaceView
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPoint
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.onyx.android.sdk.rx.RxCallback
 import com.onyx.android.sdk.rx.RxManager
+import com.onyx.zhdanov.game.sudoku.models.Field
 import com.onyx.zhdanov.game.sudoku.requests.PartialRefreshRequest
 import com.onyx.zhdanov.game.sudoku.requests.RecognizeRequest
 import com.onyx.zhdanov.game.sudoku.utils.extend
@@ -30,10 +30,9 @@ class PenHandler(
     width: Int,
     height: Int,
     private val context: Context,
-    private val surfaceView: SurfaceView,
+    private val surfaceView: GameView,
     private val field: Field,
     private val recognizeHandler: RecognizeHandler,
-    val onSuccess: (score: Long) -> Unit
 ) : RawInputCallback() {
     private val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     private val canvas: Canvas = Canvas(bitmap)
@@ -42,6 +41,12 @@ class PenHandler(
     private val uiHandler: Handler = Handler()
 
     lateinit var touchHelper: TouchHelper
+
+    var onRecognizeDigit: ((x: Int, y: Int, digit: Int) -> Boolean)? = null
+
+    init {
+        canvas.drawColor(Color.WHITE)
+    }
 
     override fun onBeginRawDrawing(p0: Boolean, p1: TouchPoint) {
     }
@@ -69,11 +74,6 @@ class PenHandler(
     }
 
     override fun onPenUpRefresh(refreshRect: RectF) {
-        Log.i("pen", "refresh rect: ${refreshRect}")
-
-        Log.i("pen", "draw rect: ${drawRect}")
-        Log.i("pen", "rect size: ${drawRect.width()} : ${drawRect.height()}")
-
         val cellRect = field.getCellRect(drawRect)
         val normalized = cellRect.intersection(drawRect).normalize()
 
@@ -88,36 +88,36 @@ class PenHandler(
             recognizeRequest,
             object : RxCallback<RecognizeRequest>() {
                 override fun onNext(request: RecognizeRequest) {
-                    Log.i("recognize", "response: ${request.recognizedDigit}")
-                    Log.i("recognize", "recognize rect: ${request.rectf}")
                     val lastMistakeRects = field.getRectOfMistakes()
-                    field.changeNumber(request.rectf.centerX(), request.rectf.centerY(), request.recognizedDigit)
+                    val (x, y) = field.getCellCoordinates(request.rectf.centerX(), request.rectf.centerY())
+                    val updated = onRecognizeDigit?.let {
+                        it(x, y, request.recognizedDigit)
+                    } ?: run {
+                        field.grid.changeCell(x, y, request.recognizedDigit)
+                    }
 
-                    val partialRefreshRequest = PartialRefreshRequest(
-                        context = context,
-                        surfaceView = surfaceView,
-                        fieldBitmap = field.bitmap,
-                        refreshRect = listOf(cellRect + refreshRect) + field.getRectOfMistakes() + lastMistakeRects,
-                        touchHelper = touchHelper,
-                    )
+                    if (updated) {
+                        Log.i("recognize", "updated")
+                        field.draw()
+                        val partialRefreshRequest = PartialRefreshRequest(
+                            context = context,
+                            surfaceView = surfaceView,
+                            fieldBitmap = field.bitmap,
+                            refreshRect = listOf(cellRect + refreshRect) + field.getRectOfMistakes() + lastMistakeRects,
+                            touchHelper = touchHelper,
+                        )
 
-                    rxManager.enqueue(
-                        partialRefreshRequest,
-                        object : RxCallback<PartialRefreshRequest>() {
-                            override fun onNext(partialRefreshRequest: PartialRefreshRequest) {
-                                uiHandler.post {
-                                    canvas.drawColor(Color.WHITE)
-                                    if (field.isSuccess()) {
-                                        onSuccess(0)
-
-                                        touchHelper
-                                            .setRawDrawingRenderEnabled(false)
-                                            .setRawDrawingEnabled(false)
+                        rxManager.enqueue(
+                            partialRefreshRequest,
+                            object : RxCallback<PartialRefreshRequest>() {
+                                override fun onNext(partialRefreshRequest: PartialRefreshRequest) {
+                                    uiHandler.post {
+                                        canvas.drawColor(Color.WHITE)
                                     }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         )

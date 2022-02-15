@@ -36,16 +36,6 @@ class RecognizeHandler(context: Context) {
         )
         val byteBuffer = convertBitmapToByteBuffer(resizedImage)
 
-        val buf = StringBuffer()
-        buf.append("===========\n")
-        for (i in 0 until  inputImageHeight) {
-            for (j in 0 until inputImageWidth) {
-                val p = normalizePixelColor(resizedImage.getPixel(j, i))
-                buf.append((String.format("%1.0f ", p )))
-            }
-            buf.append('\n')
-        }
-        Log.i("recognize", buf.toString())
         val output = Array(1) { FloatArray(OUTPUT_CLASSES_COUNT) }
 
         interpreter.run(byteBuffer, output)

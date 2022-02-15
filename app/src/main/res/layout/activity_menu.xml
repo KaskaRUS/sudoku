@@ -33,10 +33,16 @@
                 android:id="@+id/isLoading"
                 android:textAlignment="center"/>
         <Button
-                android:text="@string/easy"
+                android:text="@string/tutorial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tag="1"
+                android:id="@+id/tutorial"/>
+        <Button
+                android:text="@string/easy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="3"
                 android:id="@+id/easy"/>
         <Button
                 android:text="@string/medium"
