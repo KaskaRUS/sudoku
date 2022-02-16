@@ -37,8 +37,7 @@ class MenuActivity : AppCompatActivity() {
         binding.hard.setOnClickListener(startGame)
         binding.tutorial.setOnClickListener {
             binding.isLoading.visibility = View.VISIBLE
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("tutorial", true)
+            val intent = Intent(this, TutorialActivity::class.java)
             startActivity(intent)
         }
     }

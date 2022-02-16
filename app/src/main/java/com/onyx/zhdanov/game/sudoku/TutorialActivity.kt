@@ -3,21 +3,24 @@ package com.onyx.zhdanov.game.sudoku
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import com.onyx.android.sdk.pen.TouchHelper
+import com.onyx.zhdanov.game.sudoku.Tutorial.Companion.LAST_STEP
+import com.onyx.zhdanov.game.sudoku.components.GameView
+import com.onyx.zhdanov.game.sudoku.components.PenHandler
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityTutorialBinding
 import com.onyx.zhdanov.game.sudoku.models.Field
 import com.onyx.zhdanov.game.sudoku.models.Grid
-import com.onyx.zhdanov.game.sudoku.utils.plus
+import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
+import com.onyx.zhdanov.game.sudoku.utils.drawShadow
 
 class TutorialActivity : AppCompatActivity() {
 
     lateinit var surfaceView: GameView
+    lateinit var tutorial: Tutorial
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,35 +29,36 @@ class TutorialActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val binding = ActivityTutorialBinding.inflate(layoutInflater)
+
         surfaceView = binding.surfaceView
-        surfaceView.grid = Grid(tutorialFieldGrid()) {}
+        surfaceView.grid = Grid(tutorialFieldGrid()) {
+            tutorial.nextStep()
+        }
+
+        surfaceView.onReady = { penHandler: PenHandler, touchHelper: TouchHelper, field: Field ->
+            tutorial = Tutorial(1, surfaceView, binding.dialog, touchHelper, field, penHandler) {
+                binding.dialog.buttonNext.isEnabled = true
+                if (it == LAST_STEP) {
+                    startActivity(Intent(this, MenuActivity::class.java))
+                }
+            }
+
+            binding.dialog.buttonNext.setOnClickListener {
+                tutorial.nextStep()
+            }
+        }
+
+        surfaceView.onRender = { canvas: Canvas ->
+            surfaceView.field.draw()
+            drawRendererContent(surfaceView.field.bitmap, canvas)
+            drawShadow(canvas)
+        }
 
         setContentView(binding.root)
-
-    }
-
-    override fun onBackPressed() {
-        gotoFinishActivity("Pause")
-    }
-
-    private fun gotoFinishActivity(title: String) {
-        val intent = Intent(this, FinishGameActivity::class.java)
-        intent.putExtra("title", title)
-        background = surfaceView.getBitmap()
-        startActivity(intent)
-    }
-
-    private fun drawShadow(canvas: Canvas, field: Field) {
-        val centerSection = field.getCellRect(3, 3) + field.getCellRect(5, 5)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            canvas.clipOutRect(centerSection)
-        }
-        canvas.drawColor(Color.GRAY, PorterDuff.Mode.DARKEN)
     }
 
     companion object {
         var background: Bitmap? = null
-        private var difficult = 1
-        private var tutorial = false
+        private var step = 1
     }
 }

@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import com.onyx.android.sdk.rx.RxRequest
 import com.onyx.android.sdk.utils.RectUtils
-import com.onyx.zhdanov.game.sudoku.RecognizeHandler
+import com.onyx.zhdanov.game.sudoku.components.RecognizeHandler
 
 class RecognizeRequest(
     private val bitmap: Bitmap,
