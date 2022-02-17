@@ -207,6 +207,7 @@ class Tutorial(
 
     fun nextStep() {
         updateScreen(++step)
+        TutorialActivity.step = step
     }
 
     private fun updateScreen(step: Int) {

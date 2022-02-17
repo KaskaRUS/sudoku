@@ -1,7 +1,6 @@
 package com.onyx.zhdanov.game.sudoku
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -28,14 +27,14 @@ class TutorialActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val binding = ActivityTutorialBinding.inflate(layoutInflater)
-
+        step = intent.getIntExtra("step", step)
         surfaceView = binding.surfaceView
         surfaceView.grid = Grid(tutorialFieldGrid()) {
             tutorial.nextStep()
         }
 
         surfaceView.onReady = { penHandler: PenHandler, touchHelper: TouchHelper, field: Field ->
-            tutorial = Tutorial(0, surfaceView, binding.dialog, touchHelper, penHandler) {
+            tutorial = Tutorial(step, surfaceView, binding.dialog, touchHelper, penHandler) {
                 binding.dialog.buttonNext.isEnabled = true
                 if (it) {
                     startActivity(Intent(this, MenuActivity::class.java))
@@ -57,7 +56,6 @@ class TutorialActivity : AppCompatActivity() {
     }
 
     companion object {
-        var background: Bitmap? = null
-        private var step = 1
+        var step = 0
     }
 }

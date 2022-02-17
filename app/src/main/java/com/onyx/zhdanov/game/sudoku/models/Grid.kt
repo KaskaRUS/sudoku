@@ -1,7 +1,5 @@
 package com.onyx.zhdanov.game.sudoku.models
 
-import java.lang.StringBuilder
-
 class Grid(private val grid: Array<IntArray>, private val onSuccess: (score: Int) -> Unit) {
     var mistakes: Set<Coordinate> = setOf()
 
