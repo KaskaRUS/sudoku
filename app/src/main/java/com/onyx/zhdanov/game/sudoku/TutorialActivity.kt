@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.zhdanov.game.sudoku.Tutorial.Companion.LAST_STEP
 import com.onyx.zhdanov.game.sudoku.components.GameView
 import com.onyx.zhdanov.game.sudoku.components.PenHandler
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityTutorialBinding
@@ -36,9 +35,9 @@ class TutorialActivity : AppCompatActivity() {
         }
 
         surfaceView.onReady = { penHandler: PenHandler, touchHelper: TouchHelper, field: Field ->
-            tutorial = Tutorial(1, surfaceView, binding.dialog, touchHelper, field, penHandler) {
+            tutorial = Tutorial(0, surfaceView, binding.dialog, touchHelper, field, penHandler) {
                 binding.dialog.buttonNext.isEnabled = true
-                if (it == LAST_STEP) {
+                if (it) {
                     startActivity(Intent(this, MenuActivity::class.java))
                 }
             }

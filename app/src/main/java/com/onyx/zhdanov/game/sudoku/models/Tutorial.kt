@@ -1,5 +1,7 @@
 package com.onyx.zhdanov.game.sudoku
 
+import android.graphics.PointF
+import android.graphics.Rect
 import android.support.constraint.ConstraintLayout
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -13,19 +15,6 @@ import com.onyx.zhdanov.game.sudoku.utils.drawShadow
 import com.onyx.zhdanov.game.sudoku.utils.drawShadowWithoutRect
 import com.onyx.zhdanov.game.sudoku.utils.plus
 
-/*
-1. Show rules of games:
-    a. You have to fill all cells in field
-    b. In sections have to be only digit 1 to 9 unique
-    c. In columns have to be only digit 1 to 9 unique
-    d. In rows have to be only digit 1 to 9 unique
-2. Write digit
-3. Add mistake
-4. Remove digit
-5. Back to menu
-6. Complete field
- */
-
 fun tutorialFieldGrid() = arrayOf(
     intArrayOf(1, 0, 3, 4, 5, 6, 7, 8, 9),
     intArrayOf(4, 5, 6, 7, 8, 9, 1, 2, 3),
@@ -38,6 +27,168 @@ fun tutorialFieldGrid() = arrayOf(
     intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8),
 )
 
+data class ScreenState(
+    val buttonEnable: Boolean,
+    val message: String,
+    val alertPosition: PointF,
+    val penIsEnable: Boolean,
+    val shadow: Boolean,
+    val focusRect: Rect? = null,
+    val autoComplete: Boolean,
+    val last: Boolean,
+    val predict: ((x: Int, y: Int, digit: Int) -> Boolean)? = null,
+    val alertVisible: Boolean = true
+)
+
+private val steps = listOf(
+    ScreenState(
+        buttonEnable = true,
+        message = "Welcome! The goal of this game is to fill all of the cells with numbers.",
+        alertPosition = PointF(0.5f, 0.05f),
+        penIsEnable = false,
+        shadow = true,
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Each 3×3 box can only contain each number from 1 to 9 once.",
+        alertPosition = PointF(0.5f, 0.05f),
+        penIsEnable = false,
+        shadow = true,
+        focusRect = Rect(3, 3, 5, 5),
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Each line can only contain each number from 1 to 9 once.",
+        alertPosition = PointF(0.5f, 0.05f),
+        penIsEnable = false,
+        shadow = true,
+        focusRect = Rect(0, 2, 8, 2),
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Each column can only contain each number from 1 to 9 once.",
+        alertPosition = PointF(0.05f, 0.5f),
+        penIsEnable = false,
+        shadow = true,
+        focusRect = Rect(6, 0, 6, 8),
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = false,
+        message = "Try write digit 1 in white cell.",
+        alertPosition = PointF(0.95f, 0.5f),
+        penIsEnable = true,
+        shadow = true,
+        focusRect = Rect(7, 6, 7, 6),
+        autoComplete = true,
+        last = false,
+        predict = { x: Int, y: Int, digit: Int ->
+            digit == 1 && x == 7 && y == 6
+        }
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Great! You can see that instead of your handwritten number, the printed same number drawn. Lets go next.",
+        alertPosition = PointF(0.95f, 0.5f),
+        penIsEnable = false,
+        shadow = true,
+        focusRect = Rect(7, 6, 7, 6),
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = false,
+        message = "Try cross the digit by cross which is like 'X'",
+        alertPosition = PointF(0.95f, 0.5f),
+        penIsEnable = true,
+        shadow = true,
+        focusRect = Rect(7, 6, 7, 6),
+        autoComplete = true,
+        last = false,
+        predict = { x: Int, y: Int, digit: Int ->
+            digit == 0 && x == 7 && y == 6
+        }
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Cool! So you can correct mistakes.",
+        alertPosition = PointF(0.95f, 0.5f),
+        penIsEnable = false,
+        shadow = true,
+        focusRect = Rect(7, 6, 7, 6),
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = false,
+        message = "Try write digit 4 in white cell.",
+        alertPosition = PointF(0.95f, 0.5f),
+        penIsEnable = true,
+        shadow = true,
+        focusRect = Rect(7, 6, 7, 6),
+        autoComplete = true,
+        last = false,
+        predict = { x: Int, y: Int, digit: Int ->
+            digit == 4 && x == 7 && y == 6
+        }
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Don't worry! If you made mistake, all mistakes will be marked on field.",
+        alertPosition = PointF(0.5f, 0.3f),
+        penIsEnable = false,
+        shadow = true,
+        focusRect = Rect(0, 5, 8, 7),
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Now complete the field. Lets go!",
+        alertPosition = PointF(0.5f, 0.5f),
+        penIsEnable = false,
+        shadow = true,
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = false,
+        message = "",
+        alertPosition = PointF(0.5f, 0.5f),
+        penIsEnable = true,
+        shadow = false,
+        autoComplete = false,
+        last = false,
+        alertVisible = false
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "Congratulation! You just complete the tutorial. Now you can solve real sudoku.",
+        alertPosition = PointF(0.5f, 0.5f),
+        penIsEnable = false,
+        shadow = true,
+        autoComplete = false,
+        last = false,
+    ),
+    ScreenState(
+        buttonEnable = true,
+        message = "",
+        alertPosition = PointF(0.5f, 0.05f),
+        penIsEnable = false,
+        shadow = true,
+        autoComplete = true,
+        last = true,
+        alertVisible = false
+    ),
+)
+
 class Tutorial(
     var step: Int,
     private val gameView: GameView,
@@ -45,299 +196,70 @@ class Tutorial(
     private val touchHelper: TouchHelper,
     private val field: Field,
     private val penHandler: PenHandler,
-    private val completeStep: (step: Int) -> Unit
+    private val completeStep: (last: Boolean) -> Unit
 ) {
-    private val steps = mapOf(
-        1 to {
-            dialogBinding.buttonNext.isEnabled = true
-            dialogBinding.textDialog.text = "Welcome! The goal of this game is to fill all of the cells with numbers."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.leftMargin = gameView.width / 2 - dialogBinding.view.width / 2
-            params.topMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadow(it)
-            }
-            gameView.render()
-
-            completeStep(1)
-        },
-        2 to {
-            dialogBinding.buttonNext.isEnabled = true
-            dialogBinding.textDialog.text = "Each 3×3 box can only contain each number from 1 to 9 once."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.leftMargin = gameView.width / 2 - dialogBinding.view.width / 2
-            params.topMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            val centerSection = field.getCellRect(3, 3) + field.getCellRect(5, 5)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-
-            completeStep(2)
-        },
-        3 to {
-            dialogBinding.buttonNext.isEnabled = true
-            dialogBinding.textDialog.text = "Each line can only contain each number from 1 to 9 once."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.leftMargin = gameView.width / 2 - dialogBinding.view.width / 2
-            params.topMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            val centerSection = field.getCellRect(0, 2) + field.getCellRect(8, 2)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-
-            completeStep(3)
-        },
-        4 to {
-            dialogBinding.buttonNext.isEnabled = true
-            dialogBinding.textDialog.text = "Each column can only contain each number from 1 to 9 once."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = gameView.height / 2 - dialogBinding.view.height / 2
-            params.leftMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            val centerSection = field.getCellRect(6, 0) + field.getCellRect(6, 8)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-
-            completeStep(4)
-        },
-        5 to {
-            dialogBinding.buttonNext.isEnabled = false
-            dialogBinding.textDialog.text = "Try write digit 1 in white cell."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = gameView.height / 2 - dialogBinding.view.height / 2
-            params.leftMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(true)
-                .setRawDrawingRenderEnabled(true)
-
-            val centerSection = field.getCellRect(7, 6)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-
-            penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
-                if (digit == 1 && x == 7 && y == 6) {
-                    field.grid.changeCell(x, y, digit)
-                    dialogBinding.textDialog.text = "Great! You can see that instead of your handwritten number, the printed same number drawn. Lets go next."
-                    completeStep(5)
-                } else {
-                    dialogBinding.textDialog.text = "Try write digit 1 in white cell, again..."
-                }
-                true
-            }
-        },
-        6 to {
-            dialogBinding.buttonNext.isEnabled = false
-            dialogBinding.textDialog.text = "Try cross the digit by cross which is like 'X'"
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = gameView.height / 2 - dialogBinding.view.height / 2
-            params.leftMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(true)
-                .setRawDrawingRenderEnabled(true)
-
-            val centerSection = field.getCellRect(7, 6)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-
-            penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
-                if (digit == 0 && x == 7 && y == 6) {
-                    field.grid.changeCell(x, y, digit)
-                    dialogBinding.textDialog.text = "Cool! So you can correct mistakes."
-
-                    completeStep(6)
-                } else {
-                    dialogBinding.textDialog.text = "Try cross the digit by cross which is like 'X', again..."
-                }
-                true
-            }
-        },
-        7 to {
-            dialogBinding.buttonNext.isEnabled = false
-            dialogBinding.textDialog.text = "Try write digit 4 in white cell."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = gameView.height / 2 - dialogBinding.view.height / 2
-            params.leftMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(true)
-                .setRawDrawingRenderEnabled(true)
-
-            val centerSection = field.getCellRect(7, 6)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-
-            penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
-                if (digit == 4 && x == 7 && y == 6) {
-                    field.grid.changeCell(x, y, digit)
-                    nextStep()
-                } else {
-                    dialogBinding.textDialog.text = "Try write digit 4 in white cell, again..."
-                }
-                true
-            }
-        },
-        8 to {
-            dialogBinding.buttonNext.isEnabled = true
-            dialogBinding.textDialog.text = "Don't worry! If you made mistake, all mistakes will be marked on field."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.topMargin = gameView.height / 2 - dialogBinding.view.height / 2
-            params.leftMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            val centerSection = field.getCellRect(0, 5) + field.getCellRect(8, 7)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-        },
-        9 to {
-            dialogBinding.buttonNext.isEnabled = false
-            dialogBinding.textDialog.text = "Pay attention to that your digit is bigger than other. You can only change big digits."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.leftMargin = gameView.width / 2 - dialogBinding.view.width / 2
-            params.topMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            val centerSection = field.getCellRect(0, 5) + field.getCellRect(8, 7)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadowWithoutRect(it, centerSection)
-            }
-            gameView.render()
-            completeStep(7)
-        },
-        10 to {
-            dialogBinding.buttonNext.isEnabled = false
-            dialogBinding.textDialog.text = "Now complete the field. Lets go!"
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.leftMargin = gameView.width / 2 - dialogBinding.view.width / 2
-            params.topMargin = 32
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-                drawShadow(it)
-            }
-            gameView.render()
-            completeStep(8)
-        },
-        11 to {
-            dialogBinding.root.visibility = INVISIBLE
-
-            touchHelper.setRawDrawingEnabled(true)
-                .setRawDrawingRenderEnabled(true)
-
-            penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
-                field.grid.changeCell(x, y, digit)
-            }
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-            }
-            gameView.render()
-        },
-        12 to {
-            dialogBinding.root.visibility = VISIBLE
-            dialogBinding.buttonNext.isEnabled = true
-            dialogBinding.textDialog.text = "Congratulation! You just complete the tutorial. Now you can solve real sudoku."
-            val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
-            params.leftMargin = gameView.width / 2 - dialogBinding.view.width / 2
-            params.topMargin = gameView.height / 2 - dialogBinding.view.height / 2
-            dialogBinding.view.layoutParams = params
-
-            touchHelper.setRawDrawingEnabled(false)
-                .setRawDrawingRenderEnabled(false)
-
-            gameView.onRender = {
-                field.draw()
-                drawRendererContent(field.bitmap, it)
-            }
-            gameView.render()
-            completeStep(12)
-        },
-        LAST_STEP to {
-            completeStep(LAST_STEP)
-        }
-    )
-
     init {
-        steps[step]?.let { it() }
+        updateScreen(step)
     }
 
     fun nextStep() {
-        step++
-        steps[step]?.let { it() }
+        updateScreen(++step)
     }
 
-    companion object {
-        const val LAST_STEP = 13
+    private fun updateScreen(step: Int) {
+        val stepData = steps[step]
+
+        dialogBinding.root.visibility = if (stepData.alertVisible) VISIBLE else INVISIBLE
+
+        dialogBinding.buttonNext.isEnabled = stepData.buttonEnable
+        dialogBinding.textDialog.text = stepData.message
+
+        val params = dialogBinding.view.layoutParams as ConstraintLayout.LayoutParams
+        params.verticalBias = stepData.alertPosition.y
+        params.horizontalBias = stepData.alertPosition.x
+        dialogBinding.view.layoutParams = params
+
+        penHandler.penEnable = stepData.penIsEnable
+        touchHelper.setRawDrawingEnabled(stepData.penIsEnable)
+            .setRawDrawingRenderEnabled(stepData.penIsEnable)
+
+        val centerSection = stepData.focusRect
+            ?.let { field.getCellRect(it.left, it.top) + field.getCellRect(it.right, it.bottom) }
+
+        gameView.onRender = { canvas ->
+            field.draw()
+            drawRendererContent(field.bitmap, canvas)
+            if (stepData.shadow) {
+                if (centerSection !== null) {
+                    drawShadowWithoutRect(canvas, centerSection)
+                } else {
+                    drawShadow(canvas)
+                }
+            }
+        }
+        gameView.render()
+
+        if (stepData.predict == null) {
+            penHandler.onRecognizeDigit = null
+            if (stepData.autoComplete && !stepData.last) {
+                nextStep()
+            } else {
+                completeStep(stepData.last)
+            }
+        } else {
+            penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
+                if (stepData.predict?.let { it(x, y, digit) }) {
+                    field.grid.changeCell(x, y, digit)
+                    if (stepData.autoComplete) {
+                        nextStep()
+                    } else {
+                        completeStep(stepData.last)
+                    }
+                }
+                penHandler.penEnable = false
+
+                true
+            }
+        }
     }
 }

@@ -18,7 +18,8 @@ class PartialRefreshRequest(
     private val surfaceView: GameView,
     private val refreshRect: List<RectF>,
     private val fieldBitmap: Bitmap,
-    private val touchHelper: TouchHelper
+    private val touchHelper: TouchHelper,
+    private val penEnable: Boolean
 ) : RxRequest() {
 
     @Throws(Exception::class)
@@ -44,7 +45,7 @@ class PartialRefreshRequest(
         } finally {
             surfaceView.holder.unlockCanvasAndPost(canvas)
             EpdController.resetViewUpdateMode(surfaceView)
-            touchHelper.setRawDrawingRenderEnabled(true)
+            touchHelper.setRawDrawingRenderEnabled(penEnable)
         }
 
     }

@@ -34,6 +34,7 @@ class PenHandler(
     private val field: Field,
     private val recognizeHandler: RecognizeHandler,
 ) : RawInputCallback() {
+    var penEnable: Boolean = true
     private val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     private val canvas: Canvas = Canvas(bitmap)
     private val rxManager = RxManager.Builder.sharedSingleThreadManager()
@@ -105,6 +106,7 @@ class PenHandler(
                             fieldBitmap = field.bitmap,
                             refreshRect = listOf(cellRect + refreshRect) + field.getRectOfMistakes() + lastMistakeRects,
                             touchHelper = touchHelper,
+                            penEnable = penEnable
                         )
 
                         rxManager.enqueue(
