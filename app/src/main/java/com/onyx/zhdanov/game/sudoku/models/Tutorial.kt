@@ -34,7 +34,6 @@ data class ScreenState(
     val shadow: Boolean,
     val focusRect: Rect? = null,
     val autoComplete: Boolean,
-    val last: Boolean,
     val predict: ((x: Int, y: Int, digit: Int) -> Boolean)? = null,
     val alertVisible: Boolean = true
 )
@@ -47,7 +46,6 @@ private val steps = listOf(
         penIsEnable = false,
         shadow = true,
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = true,
@@ -57,7 +55,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(3, 3, 5, 5),
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = true,
@@ -67,7 +64,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(0, 2, 8, 2),
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = true,
@@ -77,7 +73,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(6, 0, 6, 8),
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = false,
@@ -87,7 +82,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(7, 6, 7, 6),
         autoComplete = true,
-        last = false,
         predict = { x: Int, y: Int, digit: Int ->
             digit == 1 && x == 7 && y == 6
         }
@@ -100,7 +94,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(7, 6, 7, 6),
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = false,
@@ -110,7 +103,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(7, 6, 7, 6),
         autoComplete = true,
-        last = false,
         predict = { x: Int, y: Int, digit: Int ->
             digit == 0 && x == 7 && y == 6
         }
@@ -123,7 +115,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(7, 6, 7, 6),
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = false,
@@ -133,7 +124,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(7, 6, 7, 6),
         autoComplete = true,
-        last = false,
         predict = { x: Int, y: Int, digit: Int ->
             digit == 4 && x == 7 && y == 6
         }
@@ -146,7 +136,6 @@ private val steps = listOf(
         shadow = true,
         focusRect = Rect(0, 5, 8, 7),
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = true,
@@ -155,7 +144,6 @@ private val steps = listOf(
         penIsEnable = false,
         shadow = true,
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = false,
@@ -164,7 +152,6 @@ private val steps = listOf(
         penIsEnable = true,
         shadow = false,
         autoComplete = false,
-        last = false,
         alertVisible = false
     ),
     ScreenState(
@@ -174,7 +161,6 @@ private val steps = listOf(
         penIsEnable = false,
         shadow = true,
         autoComplete = false,
-        last = false,
     ),
     ScreenState(
         buttonEnable = true,
@@ -183,7 +169,6 @@ private val steps = listOf(
         penIsEnable = false,
         shadow = true,
         autoComplete = true,
-        last = true,
         alertVisible = false
     ),
 )
@@ -194,7 +179,7 @@ class Tutorial(
     private val dialogBinding: DialogBinding,
     private val touchHelper: TouchHelper,
     private var penHandler: PenHandler,
-    private val completeStep: (last: Boolean) -> Unit
+    private val completeStep: () -> Unit
 ) {
     init {
         updateScreen(step)
@@ -202,6 +187,10 @@ class Tutorial(
         gameView.onUpdate = {
             penHandler = it
             updateScreen(step)
+        }
+
+        dialogBinding.buttonNext.setOnClickListener {
+            nextStep()
         }
     }
 
@@ -245,10 +234,10 @@ class Tutorial(
 
         if (stepData.predict == null) {
             penHandler.onRecognizeDigit = null
-            if (stepData.autoComplete && !stepData.last) {
+            if (stepData.autoComplete && !isFinishStep(step)) {
                 nextStep()
             } else {
-                completeStep(stepData.last)
+                completeStep(isFinishStep(step))
             }
         } else {
             penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
@@ -257,13 +246,23 @@ class Tutorial(
                     if (stepData.autoComplete) {
                         nextStep()
                     } else {
-                        completeStep(stepData.last)
+                        completeStep(isFinishStep(step))
                     }
+                    penHandler.penEnable = false
                 }
-                penHandler.penEnable = false
 
                 true
             }
+        }
+    }
+
+    private fun isFinishStep(step: Int) = step == steps.size - 1
+
+    private fun completeStep(last: Boolean) {
+        if (last) {
+            completeStep()
+        } else {
+            dialogBinding.buttonNext.isEnabled = true
         }
     }
 }
