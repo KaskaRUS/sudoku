@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import com.onyx.zhdanov.game.sudoku.components.GameView
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityGameBinding
 import com.onyx.zhdanov.game.sudoku.models.Grid
 
@@ -21,7 +22,7 @@ class GameActivity : AppCompatActivity() {
 
         difficult = intent.getIntExtra("difficult", difficult)
 
-        val grid = Grid(tutorialFieldGrid()) {
+        val grid = Grid(difficult) {
             gotoFinishActivity("Congratulation!")
         }
         val binding = ActivityGameBinding.inflate(layoutInflater)

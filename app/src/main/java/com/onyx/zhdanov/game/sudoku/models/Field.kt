@@ -6,9 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.Region
-import android.util.Log
-import com.onyx.zhdanov.game.sudoku.utils.plus
 import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.roundToInt

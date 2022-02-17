@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku
+package com.onyx.zhdanov.game.sudoku.components
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -25,6 +25,7 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
 
     var onReady: ((penHandler: PenHandler, touchHelper: TouchHelper, field: Field) -> Unit)? = null
     var onRender: ((canvas: Canvas) -> Unit)? = null
+    var onUpdate: ((penHandler: PenHandler) -> Unit)? = null
 
     init {
         holder.addCallback(this@GameView)
@@ -61,12 +62,10 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
 
         touchHelper.bindHostView(this, penHandler)
             .setLimitRect(limit, ArrayList<Rect>())
-            .setRawDrawingRenderEnabled(false)
+
+        onUpdate?.let { it(penHandler) }
 
         render()
-        touchHelper
-            .setRawDrawingRenderEnabled(true)
-            .setRawDrawingEnabled(true)
     }
 
     private fun init(): Pair<PenHandler, Rect> {

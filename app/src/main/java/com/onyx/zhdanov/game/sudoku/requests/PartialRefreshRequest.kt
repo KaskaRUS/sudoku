@@ -4,17 +4,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.RectF
-import android.graphics.Region
-import android.util.Log
-import android.view.SurfaceView
-import com.onyx.android.sdk.api.device.EpdDeviceManager
-import com.onyx.android.sdk.api.device.EpdDeviceManager.applyWithGCIntervalWithoutRegal
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.api.device.epd.UpdateMode
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.rx.RxRequest
 import com.onyx.android.sdk.utils.RectUtils
-import com.onyx.zhdanov.game.sudoku.GameView
+import com.onyx.zhdanov.game.sudoku.components.GameView
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 import com.onyx.zhdanov.game.sudoku.utils.plus
 
@@ -23,7 +18,8 @@ class PartialRefreshRequest(
     private val surfaceView: GameView,
     private val refreshRect: List<RectF>,
     private val fieldBitmap: Bitmap,
-    private val touchHelper: TouchHelper
+    private val touchHelper: TouchHelper,
+    private val penEnable: Boolean
 ) : RxRequest() {
 
     @Throws(Exception::class)
@@ -49,7 +45,7 @@ class PartialRefreshRequest(
         } finally {
             surfaceView.holder.unlockCanvasAndPost(canvas)
             EpdController.resetViewUpdateMode(surfaceView)
-            touchHelper.setRawDrawingRenderEnabled(true)
+            touchHelper.setRawDrawingRenderEnabled(penEnable)
         }
 
     }

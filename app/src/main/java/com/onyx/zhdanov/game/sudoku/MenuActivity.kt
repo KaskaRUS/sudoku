@@ -1,6 +1,5 @@
 package com.onyx.zhdanov.game.sudoku
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -12,7 +11,6 @@ class MenuActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMenuBinding
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,11 +35,14 @@ class MenuActivity : AppCompatActivity() {
         binding.hard.setOnClickListener(startGame)
         binding.tutorial.setOnClickListener {
             binding.isLoading.visibility = View.VISIBLE
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("tutorial", true)
+            val intent = Intent(this, TutorialActivity::class.java)
+            intent.putExtra("step", 0)
             startActivity(intent)
         }
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        binding.isLoading.visibility = View.INVISIBLE
+    }
 }

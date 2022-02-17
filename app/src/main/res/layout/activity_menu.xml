@@ -36,25 +36,24 @@
                 android:text="@string/tutorial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="1"
                 android:id="@+id/tutorial"/>
         <Button
                 android:text="@string/easy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="3"
+                android:tag="25"
                 android:id="@+id/easy"/>
         <Button
                 android:text="@string/medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="5"
+                android:tag="45"
                 android:id="@+id/medium"/>
         <Button
                 android:text="@string/hard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tag="10"
+                android:tag="60"
                 android:id="@+id/hard"/>
     </LinearLayout>
     <TextView

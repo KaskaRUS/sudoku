@@ -1,7 +1,5 @@
 package com.onyx.zhdanov.game.sudoku.models
 
-import java.lang.StringBuilder
-
 class Grid(private val grid: Array<IntArray>, private val onSuccess: (score: Int) -> Unit) {
     var mistakes: Set<Coordinate> = setOf()
 
@@ -86,12 +84,11 @@ class Grid(private val grid: Array<IntArray>, private val onSuccess: (score: Int
                 val i = fullCells.random()
                 val copyGrid = copyGrid(grid)
                 copyGrid[i / FIELD_SIZE][i % FIELD_SIZE] = 0
-                if (findAllSolutions(copyGrid).size != 1) {
-                    attempts--
-                } else {
+                if (findAllSolutions(copyGrid).size == 1) {
                     grid[i / FIELD_SIZE][i % FIELD_SIZE] = 0
                     fullCells.remove(i)
                 }
+                attempts--
             }
 
             return grid
