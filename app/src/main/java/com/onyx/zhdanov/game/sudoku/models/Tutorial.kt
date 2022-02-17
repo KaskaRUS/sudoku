@@ -9,7 +9,6 @@ import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.zhdanov.game.sudoku.components.GameView
 import com.onyx.zhdanov.game.sudoku.components.PenHandler
 import com.onyx.zhdanov.game.sudoku.databinding.DialogBinding
-import com.onyx.zhdanov.game.sudoku.models.Field
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 import com.onyx.zhdanov.game.sudoku.utils.drawShadow
 import com.onyx.zhdanov.game.sudoku.utils.drawShadowWithoutRect
@@ -194,12 +193,16 @@ class Tutorial(
     private val gameView: GameView,
     private val dialogBinding: DialogBinding,
     private val touchHelper: TouchHelper,
-    private val field: Field,
-    private val penHandler: PenHandler,
+    private var penHandler: PenHandler,
     private val completeStep: (last: Boolean) -> Unit
 ) {
     init {
         updateScreen(step)
+
+        gameView.onUpdate = {
+            penHandler = it
+            updateScreen(step)
+        }
     }
 
     fun nextStep() {
@@ -224,11 +227,11 @@ class Tutorial(
             .setRawDrawingRenderEnabled(stepData.penIsEnable)
 
         val centerSection = stepData.focusRect
-            ?.let { field.getCellRect(it.left, it.top) + field.getCellRect(it.right, it.bottom) }
+            ?.let { gameView.field.getCellRect(it.left, it.top) + gameView.field.getCellRect(it.right, it.bottom) }
 
         gameView.onRender = { canvas ->
-            field.draw()
-            drawRendererContent(field.bitmap, canvas)
+            gameView.field.draw()
+            drawRendererContent(gameView.field.bitmap, canvas)
             if (stepData.shadow) {
                 if (centerSection !== null) {
                     drawShadowWithoutRect(canvas, centerSection)
@@ -249,7 +252,7 @@ class Tutorial(
         } else {
             penHandler.onRecognizeDigit = { x: Int, y: Int, digit: Int ->
                 if (stepData.predict?.let { it(x, y, digit) }) {
-                    field.grid.changeCell(x, y, digit)
+                    gameView.field.grid.changeCell(x, y, digit)
                     if (stepData.autoComplete) {
                         nextStep()
                     } else {

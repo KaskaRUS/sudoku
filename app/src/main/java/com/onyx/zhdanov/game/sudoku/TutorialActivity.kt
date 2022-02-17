@@ -35,7 +35,7 @@ class TutorialActivity : AppCompatActivity() {
         }
 
         surfaceView.onReady = { penHandler: PenHandler, touchHelper: TouchHelper, field: Field ->
-            tutorial = Tutorial(0, surfaceView, binding.dialog, touchHelper, field, penHandler) {
+            tutorial = Tutorial(0, surfaceView, binding.dialog, touchHelper, penHandler) {
                 binding.dialog.buttonNext.isEnabled = true
                 if (it) {
                     startActivity(Intent(this, MenuActivity::class.java))

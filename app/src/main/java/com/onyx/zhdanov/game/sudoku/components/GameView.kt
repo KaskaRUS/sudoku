@@ -25,6 +25,7 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
 
     var onReady: ((penHandler: PenHandler, touchHelper: TouchHelper, field: Field) -> Unit)? = null
     var onRender: ((canvas: Canvas) -> Unit)? = null
+    var onUpdate: ((penHandler: PenHandler) -> Unit)? = null
 
     init {
         holder.addCallback(this@GameView)
@@ -56,13 +57,15 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-//        val (penHandler, limit) = init()
-//        penHandler.touchHelper = touchHelper
-//
-//        touchHelper.bindHostView(this, penHandler)
-//            .setLimitRect(limit, ArrayList<Rect>())
-//
-//        render()
+        val (penHandler, limit) = init()
+        penHandler.touchHelper = touchHelper
+
+        touchHelper.bindHostView(this, penHandler)
+            .setLimitRect(limit, ArrayList<Rect>())
+
+        onUpdate?.let { it(penHandler) }
+
+        render()
     }
 
     private fun init(): Pair<PenHandler, Rect> {
