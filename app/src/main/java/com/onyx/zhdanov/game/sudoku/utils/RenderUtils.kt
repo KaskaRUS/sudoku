@@ -23,3 +23,4 @@ fun drawShadowWithoutRect(canvas: Canvas, rect: RectF) {
 fun drawShadow(canvas: Canvas) {
     canvas.drawColor(Color.GRAY, PorterDuff.Mode.DARKEN)
 }
+

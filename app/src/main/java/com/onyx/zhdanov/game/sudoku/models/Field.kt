@@ -55,8 +55,8 @@ class Field(width: Int, height: Int, val grid: Grid) {
 
         for (i in 0 until FIELD_SIZE) {
             for (j in 0 until FIELD_SIZE) {
-                if (grid[i][j] > 0) {
-                    val text = grid[i][j].toString()
+                if (grid.grid[j, i] > 0) {
+                    val text = grid.grid[j, i].toString()
                     val textPaint = if (grid.isStartedCell(j, i)) {
                         drawableConfiguration.boldDigitPaint
                     } else {

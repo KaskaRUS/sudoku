@@ -17,8 +17,8 @@ import com.onyx.zhdanov.game.sudoku.utils.drawShadow
 
 class TutorialActivity : AppCompatActivity() {
 
-    lateinit var surfaceView: GameView
-    lateinit var tutorial: Tutorial
+    private lateinit var surfaceView: GameView
+    private lateinit var tutorial: Tutorial
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,7 @@ class TutorialActivity : AppCompatActivity() {
         val binding = ActivityTutorialBinding.inflate(layoutInflater)
         step = intent.getIntExtra("step", step)
         surfaceView = binding.surfaceView
-        surfaceView.grid = Grid(tutorialFieldGrid()) {
+        surfaceView.grid = Grid(tutorialFieldGrid.clone()) {
             tutorial.nextStep()
         }
 

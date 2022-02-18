@@ -13,6 +13,7 @@ import com.onyx.zhdanov.game.sudoku.models.Grid
 class GameActivity : AppCompatActivity() {
 
     private lateinit var surfaceView: GameView
+    private lateinit var grid: Grid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +23,7 @@ class GameActivity : AppCompatActivity() {
 
         difficult = intent.getIntExtra("difficult", difficult)
 
-        val grid = Grid(difficult) {
+        grid = Grid(difficult) {
             gotoFinishActivity("Congratulation!")
         }
         val binding = ActivityGameBinding.inflate(layoutInflater)
@@ -34,6 +35,10 @@ class GameActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         gotoFinishActivity("Pause")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
     }
 
     private fun gotoFinishActivity(title: String) {

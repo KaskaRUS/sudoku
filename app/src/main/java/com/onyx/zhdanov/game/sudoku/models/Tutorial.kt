@@ -9,22 +9,26 @@ import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.zhdanov.game.sudoku.components.GameView
 import com.onyx.zhdanov.game.sudoku.components.PenHandler
 import com.onyx.zhdanov.game.sudoku.databinding.DialogBinding
+import com.onyx.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
+import com.onyx.zhdanov.game.sudoku.utils.array2dOf
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 import com.onyx.zhdanov.game.sudoku.utils.drawShadow
 import com.onyx.zhdanov.game.sudoku.utils.drawShadowWithoutRect
 import com.onyx.zhdanov.game.sudoku.utils.plus
 
-fun tutorialFieldGrid() = arrayOf(
-    intArrayOf(1, 0, 3, 4, 5, 6, 7, 8, 9),
-    intArrayOf(4, 5, 6, 7, 8, 9, 1, 2, 3),
-    intArrayOf(7, 8, 9, 1, 2, 3, 4, 5, 6),
-    intArrayOf(2, 3, 4, 5, 6, 7, 8, 9, 1),
-    intArrayOf(5, 6, 7, 8, 9, 1, 2, 3, 4),
-    intArrayOf(8, 9, 1, 2, 3, 4, 5, 6, 7),
-    intArrayOf(3, 4, 5, 6, 7, 8, 9, 0, 2),
-    intArrayOf(6, 7, 8, 9, 1, 2, 3, 4, 5),
-    intArrayOf(9, 1, 2, 3, 4, 5, 6, 7, 8),
-)
+val tutorialFieldGrid = array2dOf(FIELD_SIZE, FIELD_SIZE) {
+    intArrayOf(
+        1, 0, 3, 4, 5, 6, 7, 8, 9,
+        4, 5, 6, 7, 8, 9, 1, 2, 3,
+        7, 8, 9, 1, 2, 3, 4, 5, 6,
+        2, 3, 4, 5, 6, 7, 8, 9, 1,
+        5, 6, 7, 8, 9, 1, 2, 3, 4,
+        8, 9, 1, 2, 3, 4, 5, 6, 7,
+        3, 4, 5, 6, 7, 8, 9, 0, 2,
+        6, 7, 8, 9, 1, 2, 3, 4, 5,
+        9, 1, 2, 3, 4, 5, 6, 7, 8
+    )
+}
 
 data class ScreenState(
     val buttonEnable: Boolean,
