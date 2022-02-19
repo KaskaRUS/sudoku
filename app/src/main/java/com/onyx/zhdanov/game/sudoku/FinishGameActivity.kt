@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityFinishGameBinding
+import com.onyx.zhdanov.game.sudoku.utils.TITLE_EXTRA
 
 class FinishGameActivity : AppCompatActivity() {
 
@@ -27,7 +28,7 @@ class FinishGameActivity : AppCompatActivity() {
 
         binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
-        titleText.text = intent.getStringExtra("title")
+        titleText.text = intent.getStringExtra(TITLE_EXTRA)
 
         GameActivity.background?.let { background ->
             binding.root.background = BitmapDrawable(resources, background)

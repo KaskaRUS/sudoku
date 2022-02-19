@@ -12,6 +12,7 @@ import com.onyx.zhdanov.game.sudoku.components.PenHandler
 import com.onyx.zhdanov.game.sudoku.databinding.ActivityTutorialBinding
 import com.onyx.zhdanov.game.sudoku.models.Field
 import com.onyx.zhdanov.game.sudoku.models.Grid
+import com.onyx.zhdanov.game.sudoku.utils.STEP_EXTRA
 import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
 import com.onyx.zhdanov.game.sudoku.utils.drawShadow
 
@@ -27,7 +28,7 @@ class TutorialActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val binding = ActivityTutorialBinding.inflate(layoutInflater)
-        step = intent.getIntExtra("step", step)
+        step = intent.getIntExtra(STEP_EXTRA, step)
         surfaceView = binding.surfaceView
         surfaceView.grid = Grid(tutorialFieldGrid.clone()) {
             tutorial.nextStep()

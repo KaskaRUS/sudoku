@@ -61,3 +61,8 @@ fun array2dOf(columns: Int, rows: Int, constructor: () -> IntArray): Array2D {
         data[x + y * columns]
     }
 }
+
+fun array2dFromStrings(columns: Int, rows: Int, string: String): Array2D =
+    array2dOf(columns, rows) {
+        string.split(",").map { it.toInt() }.toIntArray()
+    }

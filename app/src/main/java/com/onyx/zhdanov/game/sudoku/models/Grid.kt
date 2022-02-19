@@ -9,14 +9,8 @@ class Grid(val grid: Array2D, private val onSuccess: (score: Int) -> Unit) {
 
     val firstRepresentation = grid.clone()
 
-    fun loadUserSolution(solutionGrid: Array<IntArray>) {
-        solutionGrid.forEachIndexed { y, line ->
-            line.forEachIndexed { x, cell ->
-                if (cell > 0) {
-                    grid[x, y] = cell
-                }
-            }
-        }
+    fun loadUserSolution(solutionGrid: Array2D) {
+        solutionGrid.copyInto(grid)
     }
 
     fun findSolution(): Int {

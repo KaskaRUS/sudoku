@@ -38,6 +38,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tutorial"/>
         <Button
+                android:text="@string/Continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/resume"/>
+        <Button
                 android:text="@string/easy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
