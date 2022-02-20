@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.models
+package space.zhdanov.game.sudoku.models
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

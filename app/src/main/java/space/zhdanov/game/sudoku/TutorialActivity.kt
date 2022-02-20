@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku
+package space.zhdanov.game.sudoku
 
 import android.content.Intent
 import android.graphics.Canvas
@@ -7,14 +7,16 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.zhdanov.game.sudoku.components.GameView
-import com.onyx.zhdanov.game.sudoku.components.PenHandler
-import com.onyx.zhdanov.game.sudoku.databinding.ActivityTutorialBinding
-import com.onyx.zhdanov.game.sudoku.models.Field
-import com.onyx.zhdanov.game.sudoku.models.Grid
-import com.onyx.zhdanov.game.sudoku.utils.STEP_EXTRA
-import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
-import com.onyx.zhdanov.game.sudoku.utils.drawShadow
+import com.onyx.zhdanov.game.sudoku.Tutorial
+import space.zhdanov.game.sudoku.components.GameView
+import space.zhdanov.game.sudoku.components.PenHandler
+import space.zhdanov.game.sudoku.databinding.ActivityTutorialBinding
+import space.zhdanov.game.sudoku.models.Field
+import space.zhdanov.game.sudoku.models.Grid
+import com.onyx.zhdanov.game.sudoku.tutorialFieldGrid
+import space.zhdanov.game.sudoku.utils.STEP_EXTRA
+import space.zhdanov.game.sudoku.utils.drawRendererContent
+import space.zhdanov.game.sudoku.utils.drawShadow
 
 class TutorialActivity : AppCompatActivity() {
 

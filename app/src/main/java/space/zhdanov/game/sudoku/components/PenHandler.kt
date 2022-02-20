@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.components
+package space.zhdanov.game.sudoku.components
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -16,13 +16,13 @@ import com.onyx.android.sdk.pen.data.TouchPoint
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.onyx.android.sdk.rx.RxCallback
 import com.onyx.android.sdk.rx.RxManager
-import com.onyx.zhdanov.game.sudoku.models.Field
-import com.onyx.zhdanov.game.sudoku.requests.PartialRefreshRequest
-import com.onyx.zhdanov.game.sudoku.requests.RecognizeRequest
-import com.onyx.zhdanov.game.sudoku.utils.extend
-import com.onyx.zhdanov.game.sudoku.utils.intersection
-import com.onyx.zhdanov.game.sudoku.utils.normalize
-import com.onyx.zhdanov.game.sudoku.utils.plus
+import space.zhdanov.game.sudoku.models.Field
+import space.zhdanov.game.sudoku.requests.PartialRefreshRequest
+import space.zhdanov.game.sudoku.requests.RecognizeRequest
+import space.zhdanov.game.sudoku.utils.extend
+import space.zhdanov.game.sudoku.utils.intersection
+import space.zhdanov.game.sudoku.utils.normalize
+import space.zhdanov.game.sudoku.utils.plus
 import kotlin.math.max
 import kotlin.math.min
 

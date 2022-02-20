@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku
+package space.zhdanov.game.sudoku
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,19 +8,19 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
-import com.onyx.zhdanov.game.sudoku.components.GameView
-import com.onyx.zhdanov.game.sudoku.databinding.ActivityGameBinding
-import com.onyx.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
-import com.onyx.zhdanov.game.sudoku.models.Grid
-import com.onyx.zhdanov.game.sudoku.utils.Array2D
-import com.onyx.zhdanov.game.sudoku.utils.CONTINUE_EXTRA
-import com.onyx.zhdanov.game.sudoku.utils.CONTINUE_PREFERENCES
-import com.onyx.zhdanov.game.sudoku.utils.DIFFICULT_EXTRA
-import com.onyx.zhdanov.game.sudoku.utils.GAME_PREFERENCES_FILE
-import com.onyx.zhdanov.game.sudoku.utils.PLAYER_SOLUTION_PREFERENCES
-import com.onyx.zhdanov.game.sudoku.utils.STARTED_GRID_PREFERENCES
-import com.onyx.zhdanov.game.sudoku.utils.TITLE_EXTRA
-import com.onyx.zhdanov.game.sudoku.utils.array2dFromStrings
+import space.zhdanov.game.sudoku.components.GameView
+import space.zhdanov.game.sudoku.databinding.ActivityGameBinding
+import space.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
+import space.zhdanov.game.sudoku.models.Grid
+import space.zhdanov.game.sudoku.utils.Array2D
+import space.zhdanov.game.sudoku.utils.CONTINUE_EXTRA
+import space.zhdanov.game.sudoku.utils.CONTINUE_PREFERENCES
+import space.zhdanov.game.sudoku.utils.DIFFICULT_EXTRA
+import space.zhdanov.game.sudoku.utils.GAME_PREFERENCES_FILE
+import space.zhdanov.game.sudoku.utils.PLAYER_SOLUTION_PREFERENCES
+import space.zhdanov.game.sudoku.utils.STARTED_GRID_PREFERENCES
+import space.zhdanov.game.sudoku.utils.TITLE_EXTRA
+import space.zhdanov.game.sudoku.utils.array2dFromStrings
 
 class GameActivity : AppCompatActivity() {
 

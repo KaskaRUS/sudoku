@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.requests
+package space.zhdanov.game.sudoku.requests
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,9 +9,9 @@ import com.onyx.android.sdk.api.device.epd.UpdateMode
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.rx.RxRequest
 import com.onyx.android.sdk.utils.RectUtils
-import com.onyx.zhdanov.game.sudoku.components.GameView
-import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
-import com.onyx.zhdanov.game.sudoku.utils.plus
+import space.zhdanov.game.sudoku.components.GameView
+import space.zhdanov.game.sudoku.utils.drawRendererContent
+import space.zhdanov.game.sudoku.utils.plus
 
 class PartialRefreshRequest(
     context: Context,

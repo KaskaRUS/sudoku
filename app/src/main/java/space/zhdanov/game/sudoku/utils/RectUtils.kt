@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.utils
+package space.zhdanov.game.sudoku.utils
 
 import android.graphics.RectF
 import kotlin.math.max

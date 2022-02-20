@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.utils
+package space.zhdanov.game.sudoku.utils
 
 const val GAME_PREFERENCES_FILE = "GAME_PREFERENCES"
 const val CONTINUE_PREFERENCES = "continue"

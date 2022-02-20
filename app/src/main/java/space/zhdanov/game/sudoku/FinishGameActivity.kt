@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku
+package space.zhdanov.game.sudoku
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
-import com.onyx.zhdanov.game.sudoku.databinding.ActivityFinishGameBinding
-import com.onyx.zhdanov.game.sudoku.utils.TITLE_EXTRA
+import space.zhdanov.game.sudoku.databinding.ActivityFinishGameBinding
+import space.zhdanov.game.sudoku.utils.TITLE_EXTRA
 
 class FinishGameActivity : AppCompatActivity() {
 

@@ -1,6 +1,6 @@
-package com.onyx.zhdanov.game.sudoku.models
+package space.zhdanov.game.sudoku.models
 
-import com.onyx.zhdanov.game.sudoku.utils.Array2D
+import space.zhdanov.game.sudoku.utils.Array2D
 
 class Grid(val grid: Array2D, private val onSuccess: (score: Int) -> Unit) {
     var mistakes: Set<Coordinate> = findMistakes()

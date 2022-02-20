@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku
+package space.zhdanov.game.sudoku
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,12 +7,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.onyx.android.sdk.rx.RxManager
-import com.onyx.zhdanov.game.sudoku.databinding.ActivityMenuBinding
-import com.onyx.zhdanov.game.sudoku.utils.CONTINUE_EXTRA
-import com.onyx.zhdanov.game.sudoku.utils.CONTINUE_PREFERENCES
-import com.onyx.zhdanov.game.sudoku.utils.DIFFICULT_EXTRA
-import com.onyx.zhdanov.game.sudoku.utils.GAME_PREFERENCES_FILE
-import com.onyx.zhdanov.game.sudoku.utils.STEP_EXTRA
+import space.zhdanov.game.sudoku.databinding.ActivityMenuBinding
+import space.zhdanov.game.sudoku.utils.CONTINUE_EXTRA
+import space.zhdanov.game.sudoku.utils.CONTINUE_PREFERENCES
+import space.zhdanov.game.sudoku.utils.DIFFICULT_EXTRA
+import space.zhdanov.game.sudoku.utils.GAME_PREFERENCES_FILE
+import space.zhdanov.game.sudoku.utils.STEP_EXTRA
 
 class MenuActivity : AppCompatActivity() {
 

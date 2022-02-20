@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.components
+package space.zhdanov.game.sudoku.components
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,9 +11,9 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.onyx.android.sdk.data.PenConstant
 import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.zhdanov.game.sudoku.models.Field
-import com.onyx.zhdanov.game.sudoku.models.Grid
-import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
+import space.zhdanov.game.sudoku.models.Field
+import space.zhdanov.game.sudoku.models.Grid
+import space.zhdanov.game.sudoku.utils.drawRendererContent
 
 class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, attrs), SurfaceHolder.Callback {
 

@@ -6,15 +6,16 @@ import android.support.constraint.ConstraintLayout
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.zhdanov.game.sudoku.components.GameView
-import com.onyx.zhdanov.game.sudoku.components.PenHandler
-import com.onyx.zhdanov.game.sudoku.databinding.DialogBinding
-import com.onyx.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
-import com.onyx.zhdanov.game.sudoku.utils.array2dOf
-import com.onyx.zhdanov.game.sudoku.utils.drawRendererContent
-import com.onyx.zhdanov.game.sudoku.utils.drawShadow
-import com.onyx.zhdanov.game.sudoku.utils.drawShadowWithoutRect
-import com.onyx.zhdanov.game.sudoku.utils.plus
+import space.zhdanov.game.sudoku.databinding.DialogBinding
+import space.zhdanov.game.sudoku.components.GameView
+import space.zhdanov.game.sudoku.components.PenHandler
+import space.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
+import space.zhdanov.game.sudoku.utils.array2dOf
+import space.zhdanov.game.sudoku.utils.drawRendererContent
+import space.zhdanov.game.sudoku.utils.drawShadow
+import space.zhdanov.game.sudoku.utils.drawShadowWithoutRect
+import space.zhdanov.game.sudoku.utils.plus
+import space.zhdanov.game.sudoku.TutorialActivity
 
 val tutorialFieldGrid = array2dOf(FIELD_SIZE, FIELD_SIZE) {
     intArrayOf(

@@ -1,9 +1,9 @@
 package space.zhdanov.games.test
 
-import com.onyx.zhdanov.game.sudoku.models.Coordinate
-import com.onyx.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
-import com.onyx.zhdanov.game.sudoku.models.Grid
-import com.onyx.zhdanov.game.sudoku.utils.array2dOf
+import space.zhdanov.game.sudoku.models.Coordinate
+import space.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
+import space.zhdanov.game.sudoku.models.Grid
+import space.zhdanov.game.sudoku.utils.array2dOf
 import org.junit.Assert.*
 import org.junit.Test
 

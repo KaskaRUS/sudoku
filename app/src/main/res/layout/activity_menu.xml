@@ -5,7 +5,7 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              android:background="?attr/fullscreenBackgroundColor"
-                                             tools:context="com.onyx.zhdanov.game.sudoku.MenuActivity" android:id="@+id/frameLayout">
+                                             tools:context="com.onyx.zhdanov.game.sudoku.space.zhdanov.game.sudoku.MenuActivity" android:id="@+id/frameLayout">
 
     <LinearLayout
             android:layout_width="wrap_content"

@@ -1,11 +1,11 @@
-package com.onyx.zhdanov.game.sudoku.requests
+package space.zhdanov.game.sudoku.requests
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import com.onyx.android.sdk.rx.RxRequest
 import com.onyx.android.sdk.utils.RectUtils
-import com.onyx.zhdanov.game.sudoku.components.RecognizeHandler
+import space.zhdanov.game.sudoku.components.RecognizeHandler
 
 class RecognizeRequest(
     private val bitmap: Bitmap,

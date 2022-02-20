@@ -1,4 +1,4 @@
-package com.onyx.zhdanov.game.sudoku.components
+package space.zhdanov.game.sudoku.components
 
 import android.content.Context
 import android.content.res.AssetManager
