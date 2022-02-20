@@ -5,7 +5,8 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              android:background="@android:color/white"
-                                             android:orientation="vertical">
+                                             android:orientation="vertical"
+                                             tools:context="space.zhdanov.game.sudoku.TutorialActivity">
 
     <space.zhdanov.game.sudoku.components.GameView
             android:id="@+id/surface_view"

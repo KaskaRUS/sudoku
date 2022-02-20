@@ -5,7 +5,7 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              android:background="?attr/fullscreenBackgroundColor"
-                                             tools:context="com.onyx.zhdanov.game.sudoku.space.zhdanov.game.sudoku.MenuActivity" android:id="@+id/frameLayout">
+                                             tools:context="space.zhdanov.game.sudoku.MenuActivity" android:id="@+id/frameLayout">
 
     <LinearLayout
             android:layout_width="wrap_content"
@@ -20,12 +20,16 @@
                   android:layout_height="wrap_content"
                   android:textColor="?attr/fullscreenTextColor"
                   android:keepScreenOn="true"
-                  android:textStyle="bold"
-                  android:textSize="50sp"
+                  android:textSize="36sp"
                   android:gravity="center"
                   android:text="@string/app_name"
                   app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                  app:layout_constraintStart_toStartOf="parent"/>
+                  app:layout_constraintStart_toStartOf="parent" android:textStyle="normal"/>
+        <TextView
+                android:text="handwritten"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/subtitle" android:textAlignment="center"
+                android:textSize="48sp" android:fontFamily="cursive"/>
         <TextView
                 android:text="@string/field_generation"
                 android:layout_width="match_parent"
@@ -34,32 +38,32 @@
                 android:textAlignment="center"/>
         <Button
                 android:text="@string/tutorial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tutorial"/>
+                android:layout_width="110dp"
+                android:layout_height="0dp"
+                android:id="@+id/tutorial" android:layout_weight="1"/>
         <Button
                 android:text="@string/Continue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/resume"/>
+                android:layout_width="110dp"
+                android:layout_height="0dp"
+                android:id="@+id/resume" android:layout_weight="1"/>
         <Button
                 android:text="@string/easy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="110dp"
+                android:layout_height="0dp"
                 android:tag="25"
-                android:id="@+id/easy"/>
+                android:id="@+id/easy" android:layout_weight="1"/>
         <Button
                 android:text="@string/medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="110dp"
+                android:layout_height="0dp"
                 android:tag="45"
-                android:id="@+id/medium"/>
+                android:id="@+id/medium" android:layout_weight="1"/>
         <Button
                 android:text="@string/hard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="110dp"
+                android:layout_height="0dp"
                 android:tag="60"
-                android:id="@+id/hard"/>
+                android:id="@+id/hard" android:layout_weight="1"/>
     </LinearLayout>
     <TextView
             android:text="@string/contacts"
