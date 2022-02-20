@@ -9,6 +9,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light">
+        <meta-data android:name="io.sentry.dsn" android:value="https://d5a39fc070f3414da4cfb02edca9b2dc@o1148585.ingest.sentry.io/6220051" />
+        <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
         <activity
                 android:name=".FinishGameActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"

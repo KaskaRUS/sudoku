@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
+import io.sentry.Sentry
+import io.sentry.SentryLevel
 import space.zhdanov.game.sudoku.components.GameView
 import space.zhdanov.game.sudoku.databinding.ActivityGameBinding
 import space.zhdanov.game.sudoku.models.Field.Companion.FIELD_SIZE
@@ -55,6 +57,8 @@ class GameActivity : AppCompatActivity() {
                 grid.loadUserSolution(playerSolution)
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Fail of loading state", e)
+                Sentry.captureMessage("Fail of loading state", SentryLevel.ERROR)
+                Sentry.captureException(e)
                 preferences.edit().putBoolean(CONTINUE_PREFERENCES, false).apply()
                 gotoMenuActivity()
                 return
